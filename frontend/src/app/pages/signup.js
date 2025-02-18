@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export default function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -9,7 +11,7 @@ export default function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:8000/auth/signup", {
+            await axios.post(`${API_BASE_URL}/auth/signup`, {
                 email, password, name
             });
             alert("Signup successful! Please login.");

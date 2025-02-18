@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from backend.database import SessionLocal
-from backend.models import User
-from backend.schemas import UserCreate, UserLogin
-from backend.utils import hash_password, verify_password, create_access_token
+from database import SessionLocal
+from models import User
+from schemas import UserCreate, UserLogin
+from .utils import hash_password, verify_password, create_access_token
 
 router = APIRouter()
 
+# Dependency to get DB session
 def get_db():
     db = SessionLocal()
     try:
@@ -24,6 +25,8 @@ def signup(user: UserCreate, db: Session = Depends(get_db)):
     new_user = User(email=user.email, password=hashed_password, name=user.name)
     db.add(new_user)
     db.commit()
+    db.refresh(new_user)
+    
     return {"message": "User created successfully"}
 
 @router.post("/login")
