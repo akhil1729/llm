@@ -9,13 +9,21 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
         try {
-            const res = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
+            const res = await axios({
+                method: "POST",  // ✅ Force method to POST
+                url: `${API_BASE_URL}/auth/login`,
+                data: { email, password },
+                headers: { "Content-Type": "application/json" }
+            });
+            
             alert("Login successful! Token: " + res.data.access_token);
         } catch (error) {
             alert("Invalid credentials");
         }
     };
+    
 
     return (
         <div>
