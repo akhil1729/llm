@@ -1,29 +1,62 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const INACTIVITY_LIMIT = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 export default function ChatPage() {
-    const [messages, setMessages] = useState([
-        { text: "Hello! How can I assist you today?", sender: "bot" }
-    ]);
+    const [messages, setMessages] = useState([{ text: "Hello! How can I assist you today?", sender: "bot" }]);
     const [input, setInput] = useState("");
-    const [history, setHistory] = useState([]); // Chat history
-    const [isHistoryOpen, setIsHistoryOpen] = useState(true); // Toggle chat history
+    const [history, setHistory] = useState([]);
+    const [isHistoryOpen, setIsHistoryOpen] = useState(true);
+    const router = useRouter();
 
+    let logoutTimer;
+
+    // Function to reset the inactivity timer
+    const resetTimer = () => {
+        clearTimeout(logoutTimer);
+        logoutTimer = setTimeout(() => {
+            logoutUser();
+        }, INACTIVITY_LIMIT);
+    };
+
+    // Function to log out user
+    const logoutUser = () => {
+        localStorage.removeItem("token"); // Remove token
+        alert("You have been logged out due to inactivity.");
+        router.push("/login"); // Redirect to login page
+    };
+
+    // Detect user interactions and reset timer
+    useEffect(() => {
+        resetTimer(); // Start timer initially
+        document.addEventListener("mousemove", resetTimer);
+        document.addEventListener("keydown", resetTimer);
+        document.addEventListener("click", resetTimer);
+
+        return () => {
+            clearTimeout(logoutTimer);
+            document.removeEventListener("mousemove", resetTimer);
+            document.removeEventListener("keydown", resetTimer);
+            document.removeEventListener("click", resetTimer);
+        };
+    }, []);
+
+    // Send user message
     const sendMessage = async () => {
         if (!input.trim()) return;
-        
         const newMessages = [...messages, { text: input, sender: "user" }];
         setMessages(newMessages);
-        setHistory([...history, { text: input, sender: "user" }]); // Save to history
+        setHistory([...history, { text: input, sender: "user" }]);
         setInput("");
 
         try {
             const res = await axios.post(`${API_BASE_URL}/chat`, { message: input });
             setMessages([...newMessages, { text: res.data.response, sender: "bot" }]);
-            setHistory([...history, { text: res.data.response, sender: "bot" }]); // Save response
+            setHistory([...history, { text: res.data.response, sender: "bot" }]);
         } catch (error) {
             setMessages([...newMessages, { text: "Error fetching response.", sender: "bot" }]);
         }
