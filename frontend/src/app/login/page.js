@@ -19,6 +19,7 @@ export default function Login() {
         try {
             const res = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
             localStorage.setItem("token", res.data.access_token);
+            localStorage.setItem("email", email);
             router.push("/chat");
         } catch (error) {
             setError("Invalid credentials");

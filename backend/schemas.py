@@ -11,3 +11,4 @@ class UserLogin(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str
+    email: str
