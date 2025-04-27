@@ -27,3 +27,21 @@ class DemographicBase(BaseModel):
     social_class: str
     country: str
     city: str
+    consent1: bool
+    consent2: bool
+    
+class FinalAnswerSchema(BaseModel):
+    email: str
+    task1_answer: str
+    task2_answer: str
+    task3_answer: str
+
+class SurveySchema(BaseModel):
+    email: str
+    satisfaction: int
+    ease_of_use: int
+    trustworthiness: int
+    comments: str = ""  # Optional
+
+    class Config:
+        orm_mode = True

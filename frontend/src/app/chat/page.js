@@ -5,25 +5,24 @@ import axios from "axios";
 import Image from "next/image";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const INACTIVITY_LIMIT = 5 * 60 * 1000; // 5 minutes
+const INACTIVITY_LIMIT = 10 * 60 * 1000; // 10 minutes
 
 export default function ChatPage() {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
+    const [finalAnswer, setFinalAnswer] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const chatEndRef = useRef(null);
     const router = useRouter();
     const logoutTimer = useRef(null);
 
-    // Static task info (can later be dynamic)
     const taskTitle = "Task 1: Legal Advice";
     const taskDescription = "You are seeking guidance about a landlord-tenant dispute. Ask your question to the AI assistant.";
 
     const resetTimer = () => {
         clearTimeout(logoutTimer.current);
         logoutTimer.current = setTimeout(() => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("email");
+            localStorage.clear();
             alert("⏳ You have been logged out due to inactivity.");
             router.push("/login");
         }, INACTIVITY_LIMIT);
@@ -48,10 +47,9 @@ export default function ChatPage() {
 
     const sendMessage = async () => {
         if (!input.trim()) return;
-
         const email = localStorage.getItem("email");
         if (!email) {
-            alert("User email not found. Please login again.");
+            alert("Please login again.");
             router.push("/login");
             return;
         }
@@ -70,10 +68,34 @@ export default function ChatPage() {
             const botReply = { text: res.data.response, sender: "bot" };
             setMessages((prev) => [...prev, botReply]);
         } catch (error) {
-            const errorReply = { text: "❌ Error fetching response.", sender: "bot" };
-            setMessages((prev) => [...prev, errorReply]);
+            setMessages((prev) => [...prev, { text: "❌ Error fetching response.", sender: "bot" }]);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleSubmitFinalAnswer = async () => {
+        if (!finalAnswer.trim()) {
+            alert("Please enter your final answer before submitting.");
+            return;
+        }
+        const email = localStorage.getItem("email");
+        if (!email) {
+            alert("User email not found. Please login again.");
+            router.push("/login");
+            return;
+        }
+
+        try {
+            await axios.post(`${API_BASE_URL}/finalanswer`, {
+                email,
+                task_number: 1, // Task 1
+                final_answer: finalAnswer.trim(),
+            });
+            router.push("/task2"); // Redirect to Task 2
+        } catch (error) {
+            console.error("Error submitting final answer:", error);
+            alert("❌ Failed to save final answer. Please try again.");
         }
     };
 
@@ -82,17 +104,12 @@ export default function ChatPage() {
             {/* Header */}
             <div className="flex justify-between items-center p-4 bg-gray-800 shadow-md">
                 <h1 className="text-xl font-bold">Task Study Interface</h1>
-                <a
-                    href="https://www.google.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Open Google"
-                >
+                <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
                     <Image src="/google.svg" alt="Google" width={30} height={30} className="cursor-pointer" />
                 </a>
             </div>
 
-            {/* Task Instructions */}
+            {/* Task Info */}
             <div className="px-6 py-4 bg-gray-700 text-center">
                 <h2 className="text-lg font-semibold">{taskTitle}</h2>
                 <p className="text-sm text-gray-300 mt-1">{taskDescription}</p>
@@ -100,9 +117,9 @@ export default function ChatPage() {
 
             {/* Chat Window */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {messages.map((msg, index) => (
+                {messages.map((msg, idx) => (
                     <div
-                        key={index}
+                        key={idx}
                         className={`max-w-lg px-4 py-2 rounded-xl text-sm shadow ${
                             msg.sender === "user"
                                 ? "ml-auto bg-blue-600 text-white text-right"
@@ -112,13 +129,11 @@ export default function ChatPage() {
                         {msg.text}
                     </div>
                 ))}
-                {isLoading && (
-                    <div className="text-sm text-gray-400 animate-pulse">AI is typing...</div>
-                )}
+                {isLoading && <div className="text-sm text-gray-400 animate-pulse">AI is typing...</div>}
                 <div ref={chatEndRef} />
             </div>
 
-            {/* Input Area */}
+            {/* Chat Input */}
             <div className="p-4 bg-gray-800 flex items-center">
                 <input
                     className="flex-1 p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -140,9 +155,19 @@ export default function ChatPage() {
                 </button>
             </div>
 
-            {/* Final Answer Submit Button */}
-            <div className="p-4 bg-gray-900 flex justify-center">
-                <button className="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-md text-white font-medium">
+            {/* Final Answer Input */}
+            <div className="p-4 bg-gray-900 flex gap-2 justify-center items-center">
+                <input
+                    className="flex-1 p-3 rounded-lg bg-gray-700 text-white focus:outline-none"
+                    type="text"
+                    placeholder="Type your final answer..."
+                    value={finalAnswer}
+                    onChange={(e) => setFinalAnswer(e.target.value)}
+                />
+                <button
+                    onClick={handleSubmitFinalAnswer}
+                    className="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-md text-white font-bold"
+                >
                     Submit Final Answer
                 </button>
             </div>

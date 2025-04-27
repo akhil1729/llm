@@ -46,6 +46,8 @@ class Demographics(Base):
     social_class = Column(String)
     country = Column(String)
     city = Column(String)
+    consent1 = Column(Boolean, default=False)  # ✅ Add this
+    consent2 = Column(Boolean, default=False)  # ✅ Add this
 
     user = relationship("User", back_populates="demographics")
 
@@ -56,3 +58,16 @@ class ModelAssignment(Base):
     default_count = Column(Integer, default=0)
     benevolent_count = Column(Integer, default=0)
     authoritarian_count = Column(Integer, default=0)
+
+
+class FinalAnswer(Base):
+    __tablename__ = "final_answers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    task_number = Column(Integer, nullable=False)
+    final_answer = Column(Text, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+

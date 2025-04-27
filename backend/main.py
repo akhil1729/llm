@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import auth, user, chat, demographics, utils
+from routes import auth, user, chat, demographics, finalanswer, survey
 from database import engine, Base, SessionLocal
-from models import ModelAssignment  # ✅
-from sqlalchemy.orm import Session  # ✅
+from models import ModelAssignment
+from sqlalchemy.orm import Session
 
 app = FastAPI()
 
@@ -33,6 +33,8 @@ app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(user.router, prefix="/user", tags=["user"])
 app.include_router(chat.router, prefix="/chat", tags=["chat"])
 app.include_router(demographics.router, prefix="/user/demographics", tags=["demographics"])
+app.include_router(finalanswer.router, prefix="/finalanswer", tags=["finalanswer"])
+app.include_router(survey.router, prefix="/survey", tags=["survey"])
 
 @app.get("/")
 def root():
