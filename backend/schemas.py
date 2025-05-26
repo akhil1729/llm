@@ -41,7 +41,4 @@ class SurveySchema(BaseModel):
     satisfaction: int
     ease_of_use: int
     trustworthiness: int
-    comments: str = ""  # Optional
-
-    class Config:
-        orm_mode = True
+    comments: str = ""
