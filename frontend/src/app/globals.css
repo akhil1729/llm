@@ -1,12 +1,16 @@
+@import 'aos/dist/aos.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Set root theme variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
+/* Override for dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -14,8 +18,9 @@
   }
 }
 
+/* Global font and color styles */
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif, Arial, Helvetica;
 }

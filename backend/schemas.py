@@ -1,6 +1,5 @@
-# schemas.py
-
 from pydantic import BaseModel
+from typing import List
 
 class UserCreate(BaseModel):
     email: str
@@ -17,19 +16,15 @@ class ChatRequest(BaseModel):
 
 class DemographicBase(BaseModel):
     email: str
-    first_name: str
-    last_name: str
+    name: str
     age: int
     gender: str
     education: str
-    ethnicity: str
-    race: str
-    social_class: str
-    country: str
-    city: str
+    race_ethnicity: List[str]
+    college_major: str
+    chatbot_usage: str
     consent1: bool
-    consent2: bool
-    
+
 class FinalAnswerSchema(BaseModel):
     email: str
     task1_answer: str

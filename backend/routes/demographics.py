@@ -19,24 +19,19 @@ def submit_demographics(data: DemographicBase, db: Session = Depends(get_db)):
 
     demographic = Demographics(
         user_id=user.id,
-        first_name=data.first_name,
-        last_name=data.last_name,
+        name=data.name,
         age=data.age,
         gender=data.gender,
         education=data.education,
-        ethnicity=data.ethnicity,
-        race=data.race,
-        social_class=data.social_class,
-        country=data.country,
-        city=data.city,
-        consent1=data.consent1,    # ✅ Added
-        consent2=data.consent2     # ✅ Added
+        race_ethnicity=",".join(data.race_ethnicity),
+        college_major=data.college_major,
+        chatbot_usage=data.chatbot_usage,
+        consent1=data.consent1
     )
     db.add(demographic)
     db.commit()
     db.refresh(demographic)
     return {"message": "Demographic information saved successfully"}
-
 
 @router.get("/{email}")
 def get_demographics(email: str, db: Session = Depends(get_db)):

@@ -1,5 +1,3 @@
-# models.py
-
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -36,18 +34,14 @@ class Demographics(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    first_name = Column(String)
-    last_name = Column(String)
-    age = Column(Integer)
-    gender = Column(String)
-    education = Column(String)
-    ethnicity = Column(String)
-    race = Column(String)
-    social_class = Column(String)
-    country = Column(String)
-    city = Column(String)
-    consent1 = Column(Boolean, default=False)  # ✅ Add this
-    consent2 = Column(Boolean, default=False)  # ✅ Add this
+    name = Column(String, nullable=False)
+    age = Column(Integer, nullable=False)
+    gender = Column(String, nullable=False)
+    education = Column(String, nullable=False)
+    race_ethnicity = Column(Text, nullable=False)  # comma-separated values
+    college_major = Column(String, nullable=False)
+    chatbot_usage = Column(String, nullable=False)
+    consent1 = Column(Boolean, default=False)
 
     user = relationship("User", back_populates="demographics")
 
@@ -59,7 +53,6 @@ class ModelAssignment(Base):
     benevolent_count = Column(Integer, default=0)
     authoritarian_count = Column(Integer, default=0)
 
-
 class FinalAnswer(Base):
     __tablename__ = "final_answers"
 
@@ -70,4 +63,3 @@ class FinalAnswer(Base):
     timestamp = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User")
-
