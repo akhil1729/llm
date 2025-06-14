@@ -36,7 +36,7 @@ export default function DemographicsForm() {
       axios.get(`${API_BASE_URL}/user/demographics/${storedEmail}`)
         .then((res) => {
           if (res.data?.name) {
-            router.push("/chat");
+            router.push("/instructions");
           }
         })
         .catch((err) => {
