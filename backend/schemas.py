@@ -18,9 +18,8 @@ class DemographicBase(BaseModel):
     email: str
     name: str
     age: int
-    gender: str
+    identity: List[str]  # 👈 combined field (gender + race/ethnicity)
     education: str
-    race_ethnicity: List[str]
     college_major: str
     chatbot_usage: str
     consent1: bool

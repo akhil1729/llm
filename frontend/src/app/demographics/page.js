@@ -5,7 +5,7 @@ import axios from "axios";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { AiOutlineHome, AiOutlineLogin, AiOutlineUserAdd } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineLogin, AiOutlineUserAdd, AiOutlineInfoCircle } from "react-icons/ai";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -28,17 +28,14 @@ export default function DemographicsForm() {
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
-
     const storedEmail = localStorage.getItem("email");
-
     if (!storedEmail) {
       router.push("/login");
     } else {
       setEmail(storedEmail);
-
       axios.get(`${API_BASE_URL}/user/demographics/${storedEmail}`)
         .then((res) => {
-          if (res.data && res.data.name) {
+          if (res.data?.name) {
             router.push("/chat");
           }
         })
@@ -52,11 +49,9 @@ export default function DemographicsForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "age") {
       setAgeError(+value < 18);
     }
-
     setForm({ ...form, [name]: value });
   };
 
@@ -139,7 +134,9 @@ export default function DemographicsForm() {
 
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2">
-              <label htmlFor="name" className="block text-sm font-semibold mb-1">Full Name</label>
+              <label htmlFor="name" className="block text-sm font-semibold mb-1">
+                Full Name
+              </label>
               <input
                 id="name"
                 name="name"
@@ -149,15 +146,19 @@ export default function DemographicsForm() {
                 className="w-full p-3 rounded bg-gray-900 border border-gray-700"
               />
             </div>
+
             <div className="w-full md:w-1/2">
-              <label htmlFor="age" className="block text-sm font-semibold mb-1">Age</label>
+              <label htmlFor="age" className="block text-sm font-semibold mb-1 flex items-center gap-1">
+                Age
+                <AiOutlineInfoCircle title="You must be at least 18 to participate" />
+              </label>
               <input
                 id="age"
                 name="age"
                 type="number"
                 onChange={handleChange}
                 required
-                className="w-full p-3 rounded bg-gray-900 border border-gray-700"
+                className={`w-full p-3 rounded bg-gray-900 border ${ageError ? "border-red-500" : "border-gray-700"}`}
               />
               {ageError && (
                 <p className="text-red-400 text-sm mt-1">You must be 18 or older to participate.</p>
@@ -166,7 +167,10 @@ export default function DemographicsForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-1">Check all that apply:</label>
+            <label className="block text-sm font-semibold mb-1 flex items-center gap-1">
+              Check all that apply (Gender & Race/Ethnicity)
+              <AiOutlineInfoCircle title="Select one or more identities that describe you" />
+            </label>
             <div className="text-sm text-gray-300 space-y-1">
               {[
                 "Male",
@@ -195,7 +199,9 @@ export default function DemographicsForm() {
           </div>
 
           <div>
-            <label htmlFor="education" className="block text-sm font-semibold mb-1">Education</label>
+            <label htmlFor="education" className="block text-sm font-semibold mb-1">
+              Education
+            </label>
             <select
               id="education"
               name="education"
@@ -212,7 +218,9 @@ export default function DemographicsForm() {
           </div>
 
           <div>
-            <label htmlFor="college_major" className="block text-sm font-semibold mb-1">College Major</label>
+            <label htmlFor="college_major" className="block text-sm font-semibold mb-1">
+              College Major
+            </label>
             <select
               id="college_major"
               name="college_major"
@@ -233,7 +241,9 @@ export default function DemographicsForm() {
           </div>
 
           <div>
-            <label htmlFor="chatbot_usage" className="block text-sm font-semibold mb-1">Chatbot Usage Frequency</label>
+            <label htmlFor="chatbot_usage" className="block text-sm font-semibold mb-1">
+              Chatbot Usage Frequency
+            </label>
             <select
               id="chatbot_usage"
               name="chatbot_usage"

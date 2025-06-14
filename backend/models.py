@@ -36,9 +36,8 @@ class Demographics(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     name = Column(String, nullable=False)
     age = Column(Integer, nullable=False)
-    gender = Column(String, nullable=False)
+    identity = Column(Text, nullable=False)  # Comma-separated gender+race+ethnicity
     education = Column(String, nullable=False)
-    race_ethnicity = Column(Text, nullable=False)  # comma-separated values
     college_major = Column(String, nullable=False)
     chatbot_usage = Column(String, nullable=False)
     consent1 = Column(Boolean, default=False)
