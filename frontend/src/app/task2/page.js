@@ -105,7 +105,7 @@ export default function Task2Page() {
             <div className="flex justify-between items-center p-4 bg-gray-800 shadow-md">
                 <h1 className="text-xl font-bold">Task Study Interface</h1>
                 <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
-                    <Image src="/google.svg" alt="Google" width={30} height={30} className="cursor-pointer" />
+                    <Image src="/google.svg" alt="Google" width={256} height={256} className="cursor-pointer" />
                 </a>
             </div>
 

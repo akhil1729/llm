@@ -110,19 +110,23 @@ export default function DemographicsForm() {
 
       {/* Navbar */}
       <nav className="absolute top-0 left-0 w-full px-10 py-4 flex justify-between items-center z-20 text-white">
-        <div className="text-2xl font-bold tracking-wider">Aletheia</div>
-        <div className="flex space-x-6 text-lg font-medium">
-          <a href="/" className="hover:text-pink-400 flex items-center gap-1">
-            <AiOutlineHome /> Home
-          </a>
-          <a href="/signup" className="hover:text-pink-400 flex items-center gap-1">
-            <AiOutlineUserAdd /> Sign Up
-          </a>
-          <a href="/login" className="hover:text-pink-400 flex items-center gap-1">
-            <AiOutlineLogin /> Login
-          </a>
-        </div>
-      </nav>
+  <div className="text-2xl font-bold tracking-wider">Aletheia</div>
+  <div className="flex space-x-6 text-lg font-medium">
+    <a href="/" className="hover:text-pink-400 flex items-center gap-1">
+      <AiOutlineHome /> Home
+    </a>
+    <button
+      onClick={() => {
+        localStorage.clear(); // Clear session data
+        window.location.href = "/login"; // Redirect to login
+      }}
+      className="hover:text-pink-400 flex items-center gap-1"
+    >
+      <AiOutlineLogin /> Logout
+    </button>
+  </div>
+</nav>
+
 
       {/* Form Card */}
       <div
@@ -168,7 +172,7 @@ export default function DemographicsForm() {
 
           <div>
             <label className="block text-sm font-semibold mb-1 flex items-center gap-1">
-              Check all that apply (Gender & Race/Ethnicity)
+              Check all that apply
               <AiOutlineInfoCircle title="Select one or more identities that describe you" />
             </label>
             <div className="text-sm text-gray-300 space-y-1">
