@@ -36,13 +36,14 @@ class Demographics(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     name = Column(String, nullable=False)
     age = Column(Integer, nullable=False)
-    identity = Column(Text, nullable=False)  # Comma-separated gender+race+ethnicity
+    identity1 = Column(Text, nullable=False)  # gender values as comma-separated if multiple
+    identity2 = Column(Text, nullable=False)  # race/ethnicity values as comma-separated if multiple
     education = Column(String, nullable=False)
     college_major = Column(String, nullable=False)
     chatbot_usage = Column(String, nullable=False)
-    consent1 = Column(Boolean, default=False)
 
     user = relationship("User", back_populates="demographics")
+
 
 class ModelAssignment(Base):
     __tablename__ = "model_assignment"
@@ -62,3 +63,15 @@ class FinalAnswer(Base):
     timestamp = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User")
+
+class ConsentLog(Base):
+    __tablename__ = "consent_log"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    consent_given = Column(Boolean, nullable=False)
+    consent_version = Column(String, default="v1")  # You can adjust versioning later
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+

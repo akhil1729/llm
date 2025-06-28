@@ -5,7 +5,7 @@ import axios from "axios";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { AiOutlineHome, AiOutlineLogin, AiOutlineUserAdd, AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineLogin, AiOutlineInfoCircle } from "react-icons/ai";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -18,13 +18,12 @@ export default function DemographicsForm() {
   const [form, setForm] = useState({
     name: "",
     age: "",
-    identity: [],
+    identity1: [],
+    identity2: [],
     education: "",
     college_major: "",
     chatbot_usage: "",
   });
-
-  const [consent1, setConsent1] = useState(false);
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -55,20 +54,20 @@ export default function DemographicsForm() {
     setForm({ ...form, [name]: value });
   };
 
-  const handleCheckboxChange = (e) => {
+  const handleMultiSelectChange = (e, field) => {
     const { value, checked } = e.target;
     setForm((prev) => {
       const updated = checked
-        ? [...prev.identity, value]
-        : prev.identity.filter((v) => v !== value);
-      return { ...prev, identity: updated };
+        ? [...prev[field], value]
+        : prev[field].filter((v) => v !== value);
+      return { ...prev, [field]: updated };
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!consent1) {
-      alert("Please agree to the consent form.");
+    if (ageError) {
+      alert("You must be 18 or older to participate.");
       return;
     }
 
@@ -76,19 +75,16 @@ export default function DemographicsForm() {
       await axios.post(`${API_BASE_URL}/user/demographics`, {
         email,
         ...form,
-        consent1,
       });
       setSubmitted(true);
       setTimeout(() => {
-        router.push("/chat");
+        router.push("/instructions");
       }, 1500);
     } catch (err) {
       console.error("Error saving demographics:", err);
       alert("Failed to save demographics.");
     }
   };
-
-  const isSubmitDisabled = !consent1 || ageError;
 
   if (submitted) {
     return (
@@ -100,7 +96,7 @@ export default function DemographicsForm() {
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center text-white bg-black overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center px-4 text-white bg-black overflow-hidden">
       <img
         src="/ai-bg.png"
         alt="Background"
@@ -110,32 +106,30 @@ export default function DemographicsForm() {
 
       {/* Navbar */}
       <nav className="absolute top-0 left-0 w-full px-10 py-4 flex justify-between items-center z-20 text-white">
-  <div className="text-2xl font-bold tracking-wider">Aletheia</div>
-  <div className="flex space-x-6 text-lg font-medium">
-    <a href="/" className="hover:text-pink-400 flex items-center gap-1">
-      <AiOutlineHome /> Home
-    </a>
-    <button
-      onClick={() => {
-        localStorage.clear(); // Clear session data
-        window.location.href = "/login"; // Redirect to login
-      }}
-      className="hover:text-pink-400 flex items-center gap-1"
-    >
-      <AiOutlineLogin /> Logout
-    </button>
-  </div>
-</nav>
-
+        <div className="text-2xl font-bold tracking-wider">Aletheia</div>
+        <div className="flex space-x-6 text-lg font-medium">
+          <a href="/" className="hover:text-pink-400 flex items-center gap-1">
+            <AiOutlineHome /> Home
+          </a>
+          <button
+            onClick={() => {
+              localStorage.clear();
+              window.location.href = "/login";
+            }}
+            className="hover:text-pink-400 flex items-center gap-1"
+          >
+            <AiOutlineLogin /> Logout
+          </button>
+        </div>
+      </nav>
 
       {/* Form Card */}
       <div
-        className="relative z-10 w-full max-w-4xl p-10 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-green-400/20 transition duration-500"
+        className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto p-8 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-green-400/20 transition duration-500"
         data-aos="zoom-in"
       >
         <h2 className="text-3xl font-bold mb-6 text-center">Demographics Form</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2">
               <label htmlFor="name" className="block text-sm font-semibold mb-1">
@@ -170,31 +164,17 @@ export default function DemographicsForm() {
             </div>
           </div>
 
+          {/* Gender */}
           <div>
-            <label className="block text-sm font-semibold mb-1 flex items-center gap-1">
-              Check all that apply
-              <AiOutlineInfoCircle title="Select one or more identities that describe you" />
-            </label>
-            <div className="text-sm text-gray-300 space-y-1">
-              {[
-                "Male",
-                "Female",
-                "Other",
-                "Prefer not to answer",
-                "White/Caucasian",
-                "Black/African American",
-                "Asian",
-                "Native Hawaiian/Pacific Islander",
-                "Latino/Hispanic",
-                "Middle-eastern/North African"
-              ].map((option, idx) => (
-                <label key={idx} className="block">
+            <label className="block text-sm font-semibold mb-1">Gender (Check all that apply)</label>
+            <div className="flex flex-wrap gap-4 text-sm text-gray-300">
+              {["Male", "Female", "None of the above", "Prefer not to answer"].map((option, idx) => (
+                <label key={idx} className="flex items-center gap-1">
                   <input
                     type="checkbox"
                     value={option}
-                    checked={form.identity.includes(option)}
-                    onChange={handleCheckboxChange}
-                    className="mr-2"
+                    checked={form.identity1.includes(option)}
+                    onChange={(e) => handleMultiSelectChange(e, "identity1")}
                   />
                   {option}
                 </label>
@@ -202,10 +182,36 @@ export default function DemographicsForm() {
             </div>
           </div>
 
+          {/* Race/Ethnicity */}
           <div>
-            <label htmlFor="education" className="block text-sm font-semibold mb-1">
-              Education
-            </label>
+            <label className="block text-sm font-semibold mb-1">Race / Ethnicity (Check all that apply)</label>
+            <div className="flex flex-wrap gap-4 text-sm text-gray-300">
+              {[
+                "White/Caucasian",
+                "Black/African American",
+                "Asian",
+                "Native Hawaiian/Pacific Islander",
+                "Latino/Hispanic",
+                "Middle-eastern/North African",
+                "None of the above",
+                "Prefer not to answer"
+              ].map((option, idx) => (
+                <label key={idx} className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    value={option}
+                    checked={form.identity2.includes(option)}
+                    onChange={(e) => handleMultiSelectChange(e, "identity2")}
+                  />
+                  {option}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Education */}
+          <div>
+            <label htmlFor="education" className="block text-sm font-semibold mb-1">Education</label>
             <select
               id="education"
               name="education"
@@ -221,10 +227,9 @@ export default function DemographicsForm() {
             </select>
           </div>
 
+          {/* College Major */}
           <div>
-            <label htmlFor="college_major" className="block text-sm font-semibold mb-1">
-              College Major
-            </label>
+            <label htmlFor="college_major" className="block text-sm font-semibold mb-1">College Major</label>
             <select
               id="college_major"
               name="college_major"
@@ -244,10 +249,9 @@ export default function DemographicsForm() {
             </select>
           </div>
 
+          {/* Chatbot Usage */}
           <div>
-            <label htmlFor="chatbot_usage" className="block text-sm font-semibold mb-1">
-              Chatbot Usage Frequency
-            </label>
+            <label htmlFor="chatbot_usage" className="block text-sm font-semibold mb-1">Chatbot Usage Frequency</label>
             <select
               id="chatbot_usage"
               name="chatbot_usage"
@@ -263,24 +267,9 @@ export default function DemographicsForm() {
             </select>
           </div>
 
-          <div className="text-sm text-gray-300">
-            <label>
-              <input
-                type="checkbox"
-                checked={consent1}
-                onChange={(e) => setConsent1(e.target.checked)}
-                className="mr-2"
-              />
-              I consent to participate in this research study.
-            </label>
-          </div>
-
           <button
             type="submit"
-            className={`w-full py-3 rounded font-bold text-white ${
-              isSubmitDisabled ? "bg-gray-600 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"
-            }`}
-            disabled={isSubmitDisabled}
+            className="w-full py-3 rounded font-bold text-white bg-green-500 hover:bg-green-600"
           >
             Submit and Continue
           </button>

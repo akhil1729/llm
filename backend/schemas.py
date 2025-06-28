@@ -18,11 +18,12 @@ class DemographicBase(BaseModel):
     email: str
     name: str
     age: int
-    identity: List[str]  # 👈 combined field (gender + race/ethnicity)
+    identity1: List[str]
+    identity2: List[str]
     education: str
     college_major: str
     chatbot_usage: str
-    consent1: bool
+
 
 class FinalAnswerSchema(BaseModel):
     email: str
@@ -36,3 +37,8 @@ class SurveySchema(BaseModel):
     ease_of_use: int
     trustworthiness: int
     comments: str = ""
+
+class ConsentLogSchema(BaseModel):
+    email: str
+    consent_given: bool
+

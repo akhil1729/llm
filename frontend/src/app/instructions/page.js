@@ -52,7 +52,7 @@ export default function InstructionsPage() {
       >
         <h2 className="text-3xl font-bold mb-6 text-center">Study Instructions</h2>
         <p className="text-lg mb-4 leading-relaxed text-gray-300">
-          In this study, you will interact with <strong>Aletheia</strong>, a ChatGPT-like chatbot, to find answers to specific questions. As with ChatGPT, Aletheia's responses may not always be accurate. You are encouraged to verify its answers using the Google search engine by clicking the Google logo.
+          In this study, you will interact with <strong>Aletheia</strong>, a ChatGPT-like chatbot, to find answers to specific questions. As with ChatGPT, Aletheia's responses may not always be accurate. You may verify the answers with the google if unsure.
         </p>
         <p className="text-lg mb-6 leading-relaxed text-gray-300">
           You will complete <strong>three tasks</strong>. In each task, your goal is to find the correct answer to a question using either Aletheia or Google. On average, the study takes about <strong>30 minutes</strong> to complete.

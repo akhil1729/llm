@@ -21,11 +21,11 @@ def submit_demographics(data: DemographicBase, db: Session = Depends(get_db)):
         user_id=user.id,
         name=data.name,
         age=data.age,
-        identity=",".join(data.identity),  # 👈 saving gender+ethnicity combined
+        identity1=",".join(data.identity1),  # Save gender values as comma-separated
+        identity2=",".join(data.identity2),  # Save race/ethnicity values as comma-separated
         education=data.education,
         college_major=data.college_major,
-        chatbot_usage=data.chatbot_usage,
-        consent1=data.consent1
+        chatbot_usage=data.chatbot_usage
     )
     db.add(demographic)
     db.commit()

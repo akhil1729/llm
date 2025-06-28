@@ -14,7 +14,6 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -23,7 +22,6 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
       const res = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
@@ -31,22 +29,8 @@ export default function Login() {
       localStorage.setItem("token", token);
       localStorage.setItem("email", email);
 
-      try {
-        const demoRes = await axios.get(`${API_BASE_URL}/user/demographics/${email}`);
-        const demographics = demoRes.data;
-
-        if (demographics?.first_name) {
-          router.push("/chat");
-        } else {
-          router.push("/demographics");
-        }
-      } catch (err) {
-        if (err.response?.status === 404) {
-          router.push("/demographics");
-        } else {
-          toast.error("Error checking demographics.");
-        }
-      }
+      // Direct user to /terms after successful login
+      router.push("/terms");
     } catch {
       toast.error("Invalid credentials. Please try again.");
     }
