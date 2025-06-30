@@ -64,6 +64,7 @@ export default function ChatPage() {
       const res = await axios.post(`${API_BASE_URL}/chat`, {
         email,
         message: input.trim(),
+        task_number:1
       });
       const botReply = { text: res.data.response, sender: "bot" };
       setMessages((prev) => [...prev, botReply]);

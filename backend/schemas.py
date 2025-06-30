@@ -13,6 +13,7 @@ class UserLogin(BaseModel):
 class ChatRequest(BaseModel):
     message: str
     email: str
+    task_number: int
 
 class DemographicBase(BaseModel):
     email: str

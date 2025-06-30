@@ -63,6 +63,7 @@ export default function Task2Page() {
             const res = await axios.post(`${API_BASE_URL}/chat`, {
                 email,
                 message: input.trim(),
+                task_number:2
             });
 
             const botReply = { text: res.data.response, sender: "bot" };

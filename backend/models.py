@@ -21,6 +21,7 @@ class Chat(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     message = Column(Text, nullable=False)
+    task_number = Column(Integer, nullable=False)
     response = Column(Text, nullable=False)
     original_response = Column(Text, nullable=True)
     was_hallucinated = Column(Boolean, default=False)

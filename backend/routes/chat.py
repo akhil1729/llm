@@ -29,20 +29,15 @@ def chat_and_save(request: ChatRequest, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Step 1: Assign model personality (0, 1, 2) using round-robin
     personality_index = assign_model_round_robin(db)
-
-    # Step 2: Flip coin to decide hallucination (True/False)
     hallucinate = flip_coin(probability=0.5)
 
-    # Step 3: Get LLM response with v3 logic
     response_data = get_llm_response_v3(
         message=request.message,
         personality_index=personality_index,
         hallucinate=hallucinate
     )
 
-    # Step 4: Save everything in database
     new_chat = Chat(
         user_id=user.id,
         message=request.message,
@@ -50,12 +45,13 @@ def chat_and_save(request: ChatRequest, db: Session = Depends(get_db)):
         original_response=response_data["original_response"],
         was_hallucinated=response_data["was_hallucinated"],
         personality_index=personality_index,
+        task_number=request.task_number,  # 👈 Save task number
         timestamp=datetime.utcnow()
     )
     db.add(new_chat)
     db.commit()
 
-    # Step 5: Return ONLY the final response to frontend
     return {
         "response": response_data["response"]
     }
+
