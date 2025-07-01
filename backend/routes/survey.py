@@ -3,7 +3,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
-from models import User
+from models import User, Survey
 from schemas import SurveySchema
 
 router = APIRouter()
@@ -14,12 +14,16 @@ def submit_survey(data: SurveySchema, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found.")
 
-    print(f"Survey response from {user.email}:")
-    print(f"Satisfaction: {data.satisfaction}")
-    print(f"Ease of Use: {data.ease_of_use}")
-    print(f"Trustworthiness: {data.trustworthiness}")
-    print(f"Comments: {data.comments}")
+    new_survey = Survey(
+        user_id=user.id,
+        trust_answers=data.trust_answers,
+        verify_needed=data.verify_needed,
+        comfort_communication=data.comfort_communication,
+        reuse_chatbot=data.reuse_chatbot,
+        comments=data.comments
+    )
+    db.add(new_survey)
+    db.commit()
 
-    # 🚀 TODO: You can also save survey responses in a Survey table if needed.
+    return {"message": "Exit survey submitted successfully"}
 
-    return {"message": "✅ Survey submitted successfully"}

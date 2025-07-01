@@ -34,10 +34,12 @@ class FinalAnswerSchema(BaseModel):
 
 class SurveySchema(BaseModel):
     email: str
-    satisfaction: int
-    ease_of_use: int
-    trustworthiness: int
+    trust_answers: str
+    verify_needed: str
+    comfort_communication: str
+    reuse_chatbot: str
     comments: str = ""
+
 
 class ConsentLogSchema(BaseModel):
     email: str

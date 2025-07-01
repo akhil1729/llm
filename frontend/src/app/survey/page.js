@@ -1,103 +1,144 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Link from "next/link";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AiOutlineHome } from "react-icons/ai";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function SurveyPage() {
-    const router = useRouter();
-    const [form, setForm] = useState({
-        satisfaction: "",
-        ease_of_use: "",
-        trustworthiness: "",
-        comments: "",
-    });
+  const router = useRouter();
+  const [form, setForm] = useState({
+    trust_answers: "",
+    verify_needed: "",
+    comfort_communication: "",
+    reuse_chatbot: "",
+    comments: "",
+  });
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const email = localStorage.getItem("email");
-        if (!email) {
-            alert("Session expired. Please login again.");
-            router.push("/login");
-            return;
-        }
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-        try {
-            await axios.post(`${API_BASE_URL}/survey`, {
-                email,
-                ...form,
-            });
-            router.push("/thankyou");
-        } catch (error) {
-            console.error("Survey submission error:", error);
-            alert("Failed to submit survey. Please try again.");
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const email = localStorage.getItem("email");
+    if (!email) {
+      toast.error("Session expired. Please login again.");
+      router.push("/login");
+      return;
+    }
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white">
-            <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-xl">
-                <h2 className="text-3xl font-bold mb-6 text-center">User Experience Survey</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <label className="block">
-                        <span>Overall satisfaction with the AI responses (1-5)</span>
-                        <input
-                            name="satisfaction"
-                            type="number"
-                            min="1"
-                            max="5"
-                            required
-                            onChange={handleChange}
-                            className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
-                        />
-                    </label>
+    try {
+      await axios.post(`${API_BASE_URL}/survey`, {
+        email,
+        ...form,
+      });
+      toast.success("✅ Survey submitted!");
+      setTimeout(() => {
+        router.push("/thankyou");
+      }, 1000);
+    } catch (error) {
+      console.error("Survey submission error:", error);
+      toast.error("Failed to submit survey. Please try again.");
+    }
+  };
 
-                    <label className="block">
-                        <span>Ease of using the interface (1-5)</span>
-                        <input
-                            name="ease_of_use"
-                            type="number"
-                            min="1"
-                            max="5"
-                            required
-                            onChange={handleChange}
-                            className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
-                        />
-                    </label>
+  const options = [
+    "Strongly Disagree",
+    "Somewhat Disagree",
+    "Neutral",
+    "Somewhat Agree",
+    "Strongly Agree",
+  ];
 
-                    <label className="block">
-                        <span>Trustworthiness of AI responses (1-5)</span>
-                        <input
-                            name="trustworthiness"
-                            type="number"
-                            min="1"
-                            max="5"
-                            required
-                            onChange={handleChange}
-                            className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
-                        />
-                    </label>
+  return (
+    <div className="relative min-h-screen flex items-center justify-center text-white bg-black overflow-hidden">
+      {/* Background Image */}
+      <img
+        src="/ai-bg.png"
+        alt="Background"
+        className="absolute inset-0 w-full h-full object-cover opacity-20"
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-80"></div>
 
-                    <label className="block">
-                        <span>Additional comments (optional)</span>
-                        <textarea
-                            name="comments"
-                            onChange={handleChange}
-                            className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
-                            rows="3"
-                        />
-                    </label>
+      {/* Toast */}
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar theme="dark" />
 
-                    <button type="submit" className="w-full bg-green-600 hover:bg-green-700 py-3 rounded text-white font-bold">
-                        Submit Survey
-                    </button>
-                </form>
-            </div>
+      {/* Navbar */}
+      <nav className="absolute top-0 left-0 w-full px-10 py-4 flex justify-between items-center z-20 text-white">
+        <div className="text-2xl font-bold tracking-wider">Aletheia</div>
+        <div className="flex space-x-6 text-lg font-medium">
+          <Link href="/" className="hover:text-pink-400 flex items-center gap-1">
+            <AiOutlineHome /> Home
+          </Link>
         </div>
-    );
+      </nav>
+
+      {/* Survey Card */}
+      <div
+        className="relative z-10 max-w-4xl w-full p-10 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-green-500/20 transition duration-500"
+        data-aos="zoom-in"
+      >
+        <h2 className="text-3xl font-bold mb-6 text-center drop-shadow-lg">Exit Survey</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <p className="text-sm text-gray-300 mb-2">
+            Based on your experience performing the tasks using Aletheia, please indicate how much you agree with the following statements:
+          </p>
+
+          {[
+            { label: "I trust the answers I received from Aletheia", name: "trust_answers" },
+            { label: "I felt that I needed to verify the accuracy of the answers received from Aletheia", name: "verify_needed" },
+            { label: "I feel comfortable with the way Aletheia communicates with me", name: "comfort_communication" },
+            { label: "I will use Aletheia again if it is available", name: "reuse_chatbot" },
+          ].map((q) => (
+            <div key={q.name} className="space-y-1">
+              <span className="block font-medium mb-1">{q.label}</span>
+              <div className="flex flex-wrap gap-4 justify-between bg-gray-900 p-3 rounded-lg">
+                {options.map((opt) => (
+                  <label key={opt} className="flex flex-col items-center space-y-1 text-xs">
+                    <input
+                      type="radio"
+                      name={q.name}
+                      value={opt}
+                      required
+                      onChange={handleChange}
+                      className="accent-green-500"
+                    />
+                    <span>{opt}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <label className="block">
+            <span>Additional comments (optional)</span>
+            <textarea
+              name="comments"
+              onChange={handleChange}
+              className="w-full p-2 mt-1 rounded bg-gray-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              rows="3"
+            />
+          </label>
+
+          <button
+            type="submit"
+            className="w-full flex justify-center items-center bg-green-600 hover:bg-green-700 py-3 rounded-lg text-white font-bold shadow-lg transition"
+          >
+            Submit Survey
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }

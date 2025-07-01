@@ -76,3 +76,18 @@ class ConsentLog(Base):
 
     user = relationship("User")
 
+class Survey(Base):
+    __tablename__ = "surveys"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    trust_answers = Column(String, nullable=False)
+    verify_needed = Column(String, nullable=False)
+    comfort_communication = Column(String, nullable=False)
+    reuse_chatbot = Column(String, nullable=False)
+    comments = Column(Text, nullable=True)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+
+
