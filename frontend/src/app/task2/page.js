@@ -16,8 +16,8 @@ export default function Task2Page() {
     const router = useRouter();
     const logoutTimer = useRef(null);
 
-    const taskTitle = "Task 2: Financial Planning Advice";
-    const taskDescription = "You are asking the AI assistant for help creating a personal monthly budget.";
+    const taskTitle = "Mathematics";
+    const taskDescription = "Which of the following sets is not a group under addition? Integers, real numbers, or natural numbers?";
 
     const resetTimer = () => {
         clearTimeout(logoutTimer.current);
@@ -104,7 +104,7 @@ export default function Task2Page() {
         <div className="flex flex-col h-screen bg-gray-900 text-white">
             {/* Header */}
             <div className="flex justify-between items-center p-4 bg-gray-800 shadow-md">
-                <h1 className="text-xl font-bold">Task Study Interface</h1>
+                <h1 className="text-xl font-bold">Aletheia</h1>
                 <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
                     <Image src="/google.svg" alt="Google" width={256} height={256} className="cursor-pointer" />
                 </a>

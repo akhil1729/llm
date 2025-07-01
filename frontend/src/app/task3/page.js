@@ -16,8 +16,8 @@ export default function Task3Page() {
     const router = useRouter();
     const logoutTimer = useRef(null);
 
-    const taskTitle = "Task 3: Health and Wellness Advice";
-    const taskDescription = "You are seeking personalized fitness or diet advice from the AI assistant.";
+    const taskTitle = "Physics / Quantum Mechanics";
+    const taskDescription = "If a non-Hermitian operator has real eigenvalues, what specific symmetry may be present?";
 
     const resetTimer = () => {
         clearTimeout(logoutTimer.current);
@@ -104,7 +104,7 @@ export default function Task3Page() {
         <div className="flex flex-col h-screen bg-gray-900 text-white">
             {/* Header */}
             <div className="flex justify-between items-center p-4 bg-gray-800 shadow-md">
-                <h1 className="text-xl font-bold">Task Study Interface</h1>
+                <h1 className="text-xl font-bold">Aletheia</h1>
                 <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
                     <Image src="/google.svg" alt="Google" width={30} height={30} className="cursor-pointer" />
                 </a>
