@@ -4,7 +4,7 @@ from database import get_db
 from models import Chat, User
 from schemas import ChatRequest
 from datetime import datetime
-from routes.llm_handler import get_llm_response_v3  # LLM with personality + hallucination
+from routes.llm_handler import generate_response  # LLM with personality + hallucination
 from routes.utils import assign_model_round_robin
 import random  # ✅ Added for flip_coin
 
@@ -32,11 +32,8 @@ def chat_and_save(request: ChatRequest, db: Session = Depends(get_db)):
     personality_index = assign_model_round_robin(db)
     hallucinate = flip_coin(probability=0.5)
 
-    response_data = get_llm_response_v3(
-        message=request.message,
-        personality_index=personality_index,
-        hallucinate=hallucinate
-    )
+    response_data = generate_response(request.message)
+
 
     new_chat = Chat(
         user_id=user.id,

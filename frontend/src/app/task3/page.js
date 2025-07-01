@@ -3,11 +3,12 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
+import DOMPurify from "dompurify"; // Make sure to install this: npm install dompurify
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const INACTIVITY_LIMIT = 10 * 60 * 1000; // 10 min
 
-export default function Task2Page() {
+export default function Task3Page() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [finalAnswer, setFinalAnswer] = useState("");
@@ -89,10 +90,10 @@ export default function Task2Page() {
     try {
       await axios.post(`${API_BASE_URL}/finalanswer`, {
         email,
-        task_number: 2,
+        task_number: 3,
         final_answer: finalAnswer.trim()
       });
-      router.push("/task3");
+      router.push("/survey");
     } catch {
       alert("❌ Failed to save final answer. Please try again.");
     }
@@ -115,13 +116,12 @@ export default function Task2Page() {
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
         {messages.map((msg, idx) => (
           <div key={idx} className={`w-full flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-3xl px-5 py-3 rounded-2xl shadow-sm leading-relaxed break-words ${
-              msg.sender === "user"
-                ? "bg-blue-600 text-white text-base"
-                : "bg-gray-800 text-gray-100 text-base"
-            }`}>
-              {msg.text}
-            </div>
+            <div
+              className={`max-w-3xl px-5 py-3 rounded-2xl shadow-sm leading-relaxed break-words ${
+                msg.sender === "user" ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-100"
+              } prose prose-invert`}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(msg.text) }}
+            />
           </div>
         ))}
         {isLoading && <div className="text-sm text-gray-400 animate-pulse">✨ Aletheia is typing...</div>}

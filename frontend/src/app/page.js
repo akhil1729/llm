@@ -88,9 +88,7 @@ export default function Home() {
         >
           <h2 className="text-3xl font-bold mb-4 text-center">About Aletheia</h2>
           <p className="text-gray-200 text-sm text-center">
-            Aletheia is an experimental AI assistant designed for research-driven tasks.
-            It leverages LLMs and interactive tools to enhance the reliability and
-            transparency of AI-aided decision making.
+            Aletheia is an AI-powered assistant designed to support users in finding information, solving tasks, and exploring knowledge interactively. It blends advanced language models with dynamic response styles to study how people engage with AI, especially in scenarios involving varied tones and occasional deliberate errors to assess trust and perception. Aletheia’s mission is to enhance understanding of AI trustworthiness and human-AI interaction.
           </p>
         </div>
       </div>

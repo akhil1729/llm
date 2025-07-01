@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
+import DOMPurify from "dompurify";  // Install via: npm install dompurify
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const INACTIVITY_LIMIT = 10 * 60 * 1000; // 10 minutes
@@ -64,7 +65,7 @@ export default function ChatPage() {
       const res = await axios.post(`${API_BASE_URL}/chat`, {
         email,
         message: input.trim(),
-        task_number:1
+        task_number: 1,
       });
       const botReply = { text: res.data.response, sender: "bot" };
       setMessages((prev) => [...prev, botReply]);
@@ -122,18 +123,19 @@ export default function ChatPage() {
       {/* Chat Scrollable Area */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
         {messages.map((msg, idx) => (
-  <div key={idx} className={`w-full flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-    <div
-      className={`max-w-3xl px-5 py-3 rounded-2xl shadow-sm leading-relaxed break-words ${
-        msg.sender === "user"
-          ? "bg-blue-600 text-white text-base"
-          : "bg-gray-800 text-gray-100 text-base"
-      }`}
-    >
-      {msg.text}
-    </div>
-  </div>
-))}
+          <div key={idx} className={`w-full flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+            <div
+              className={`max-w-3xl px-5 py-3 rounded-2xl shadow-sm leading-relaxed break-words ${
+                msg.sender === "user"
+                  ? "bg-blue-600 text-white text-base"
+                  : "bg-gray-800 text-gray-100 text-base"
+              } prose prose-invert`}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(msg.text)
+              }}
+            />
+          </div>
+        ))}
 
         {isLoading && (
           <div className="text-sm text-gray-400 animate-pulse">✨ Aletheia is typing...</div>

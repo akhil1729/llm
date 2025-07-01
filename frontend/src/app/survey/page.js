@@ -45,7 +45,7 @@ export default function SurveyPage() {
       });
       toast.success("✅ Survey submitted!");
       setTimeout(() => {
-        router.push("/thankyou");
+        router.push("/debrief");
       }, 1000);
     } catch (error) {
       console.error("Survey submission error:", error);
