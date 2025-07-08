@@ -54,9 +54,9 @@ export default function Home() {
         >
           <Typewriter
             words={[
-              "AI-powered Research Assistant.",
-              "Secure. Reliable. Fast.",
-              "Built for the Future of Science.",
+              "An AI assistant for a research study by UMBC",
+              "An AI assistant for a research study by UMBC.",
+              "An AI assistant for a research study by UMBC.",
             ]}
             loop
             cursor

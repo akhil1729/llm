@@ -75,17 +75,17 @@ export default function DebriefPage() {
 
           <ul className="list-disc list-inside space-y-2">
             <li>
-              <strong>Question 1:</strong> The Sykes-Picot Agreement of 1916
+              <strong>Question:</strong> The Sykes-Picot Agreement of 1916
               divided Ottoman lands between which two powers? <br />
               <span className="text-green-400">Answer: Britain and France</span>
             </li>
             <li>
-              <strong>Question 2:</strong> Which of the following sets is not a
+              <strong>Question:</strong> Which of the following sets is not a
               group under addition? Integers, real numbers, or natural numbers? <br />
               <span className="text-green-400">Answer: Natural numbers</span>
             </li>
             <li>
-              <strong>Question 3:</strong> If a non-Hermitian operator has real
+              <strong>Question:</strong> If a non-Hermitian operator has real
               eigenvalues, what specific symmetry may be present? <br />
               <span className="text-green-400">
                 Answer: It may possess PT-symmetry (parity-time symmetry)
@@ -99,7 +99,7 @@ export default function DebriefPage() {
           </p>
 
           <p>
-            Additional resources on the trustworthiness of AI chatbots can be
+            Additional resources on the trustworthiness of AI Assistants can be
             found here:{" "}
             <a
               href="#"

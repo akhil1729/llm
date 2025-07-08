@@ -168,7 +168,7 @@ export default function DemographicsForm() {
           <div>
             <label className="block text-sm font-semibold mb-1">Check all that apply</label>
             <div className="flex flex-wrap gap-4 text-sm text-gray-300">
-              {["Male", "Female", "None", "Prefer not to answer"].map((option, idx) => (
+              {["Male", "Female", "None of the above", "Prefer not to answer"].map((option, idx) => (
                 <label key={idx} className="flex items-center gap-1">
                   <input
                     type="checkbox"
@@ -193,7 +193,7 @@ export default function DemographicsForm() {
                 "Native Hawaiian/Pacific Islander",
                 "Latino/Hispanic",
                 "Middle-eastern/North African",
-                "None",
+                "None of the above",
                 "Prefer not to answer"
               ].map((option, idx) => (
                 <label key={idx} className="flex items-center gap-1">
