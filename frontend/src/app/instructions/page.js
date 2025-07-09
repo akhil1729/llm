@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { AiOutlineHome, AiOutlineUserAdd, AiOutlineLogin } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineLogin } from "react-icons/ai";
 
 export default function InstructionsPage() {
   const router = useRouter();
@@ -13,8 +13,19 @@ export default function InstructionsPage() {
   }, []);
 
   const handleContinue = () => {
-    router.push("/chat");
+  const taskMap = {
+    1: "/chat",
+    2: "/task2",
+    3: "/task3"
   };
+
+  const shuffled = [1, 2, 3].sort(() => 0.5 - Math.random());
+  const pathOrder = shuffled.map((num) => taskMap[num]);
+
+  localStorage.setItem("taskOrder", JSON.stringify(pathOrder));
+  router.push(pathOrder[0]);
+};
+
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center text-white bg-black overflow-hidden">
@@ -27,23 +38,22 @@ export default function InstructionsPage() {
 
       {/* Navbar */}
       <nav className="absolute top-0 left-0 w-full px-10 py-4 flex justify-between items-center z-20 text-white">
-  <div className="text-2xl font-bold tracking-wider">Aletheia</div>
-  <div className="flex space-x-6 text-lg font-medium">
-    <a href="/" className="hover:text-pink-400 flex items-center gap-1">
-      <AiOutlineHome /> Home
-    </a>
-    <button
-      onClick={() => {
-        localStorage.clear(); // Clear session data
-        window.location.href = "/login"; // Redirect to login
-      }}
-      className="hover:text-pink-400 flex items-center gap-1"
-    >
-      <AiOutlineLogin /> Logout
-    </button>
-  </div>
-</nav>
-
+        <div className="text-2xl font-bold tracking-wider">Aletheia</div>
+        <div className="flex space-x-6 text-lg font-medium">
+          <a href="/" className="hover:text-pink-400 flex items-center gap-1">
+            <AiOutlineHome /> Home
+          </a>
+          <button
+            onClick={() => {
+              localStorage.clear();
+              window.location.href = "/login";
+            }}
+            className="hover:text-pink-400 flex items-center gap-1"
+          >
+            <AiOutlineLogin /> Logout
+          </button>
+        </div>
+      </nav>
 
       {/* Instructions Card */}
       <div
@@ -61,7 +71,7 @@ export default function InstructionsPage() {
           onClick={handleContinue}
           className="w-full py-3 rounded font-bold text-white bg-green-500 hover:bg-green-600 transition duration-300"
         >
-          Continue to Task 1
+          Continue to Task
         </button>
       </div>
     </div>

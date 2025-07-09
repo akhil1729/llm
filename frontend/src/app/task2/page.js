@@ -76,28 +76,36 @@ export default function Task2Page() {
   };
 
   const handleSubmitFinalAnswer = async () => {
-    if (!finalAnswer.trim()) {
-      alert("Please enter your final answer before submitting.");
-      return;
-    }
-    const email = localStorage.getItem("email");
-    if (!email) {
-      alert("User email not found. Please login again.");
-      router.push("/login");
-      return;
-    }
+  if (!finalAnswer.trim()) {
+    alert("Please enter your final answer before submitting.");
+    return;
+  }
+  const email = localStorage.getItem("email");
+  if (!email) {
+    alert("User email not found. Please login again.");
+    router.push("/login");
+    return;
+  }
 
-    try {
-      await axios.post(`${API_BASE_URL}/finalanswer`, {
-        email,
-        task_number: 2,
-        final_answer: finalAnswer.trim()
-      });
-      router.push("/task3");
-    } catch {
-      alert("❌ Failed to save final answer. Please try again.");
-    }
-  };
+  try {
+    await axios.post(`${API_BASE_URL}/finalanswer`, {
+      email,
+      task_number: 2, // Keep constant per task file
+      final_answer: finalAnswer.trim(),
+    });
+
+    const taskOrder = JSON.parse(localStorage.getItem("taskOrder"));
+const currentPath = window.location.pathname;
+const currentIndex = taskOrder.findIndex((p) => p === currentPath);
+const nextPath = taskOrder[currentIndex + 1] || "/survey";
+router.push(nextPath);
+
+  } catch (error) {
+    console.error("Error submitting final answer:", error);
+    alert("❌ Failed to save final answer. Please try again.");
+  }
+};
+
 
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-white">
