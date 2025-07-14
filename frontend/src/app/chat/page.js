@@ -48,36 +48,45 @@ export default function ChatPage() {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
-    const email = localStorage.getItem("email");
-    if (!email) {
-      alert("Please login again.");
-      router.push("/login");
+  if (!input.trim()) return;
+  const email = localStorage.getItem("email");
+  if (!email) {
+    alert("Please login again.");
+    router.push("/login");
+    return;
+  }
+
+  const userMessage = { text: input, sender: "user" };
+  setMessages((prev) => [...prev, userMessage]);
+  setInput("");
+  setIsLoading(true);
+
+  try {
+    const res = await axios.post(`${API_BASE_URL}/chat`, {
+      email,
+      message: input.trim(),
+      task_number: 1, // Update dynamically for task2, task3
+    });
+    const botReply = { text: res.data.response, sender: "bot" };
+    setMessages((prev) => [...prev, botReply]);
+  } catch (error) {
+    if (error.response?.status === 403) {
+      alert("⚠️ You have exceeded your 100-query limit. You are now being logged out.");
+      localStorage.clear();
+      router.push("/");
       return;
     }
 
-    const userMessage = { text: input, sender: "user" };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setIsLoading(true);
+    setMessages((prev) => [
+      ...prev,
+      { text: "❌ Error fetching response.", sender: "bot" },
+    ]);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-    try {
-      const res = await axios.post(`${API_BASE_URL}/chat`, {
-        email,
-        message: input.trim(),
-        task_number: 1,
-      });
-      const botReply = { text: res.data.response, sender: "bot" };
-      setMessages((prev) => [...prev, botReply]);
-    } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        { text: "❌ Error fetching response.", sender: "bot" },
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
 
   const handleSubmitFinalAnswer = async () => {
   if (!finalAnswer.trim()) {

@@ -29,11 +29,15 @@ def chat_and_save(request: ChatRequest, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
+    # ✅ Count previous queries
+    query_count = db.query(Chat).filter(Chat.user_id == user.id).count()
+    if query_count >= 100:
+        raise HTTPException(status_code=403, detail="❌ You have exceeded the 100-query limit.")
+
     personality_index = assign_model_round_robin(db)
     hallucinate = flip_coin(probability=0.5)
 
     response_data = generate_response(request.message)
-
 
     new_chat = Chat(
         user_id=user.id,
@@ -42,7 +46,7 @@ def chat_and_save(request: ChatRequest, db: Session = Depends(get_db)):
         original_response=response_data["original_response"],
         was_hallucinated=response_data["was_hallucinated"],
         personality_index=personality_index,
-        task_number=request.task_number,  # 👈 Save task number
+        task_number=request.task_number,
         timestamp=datetime.utcnow()
     )
     db.add(new_chat)
@@ -51,4 +55,5 @@ def chat_and_save(request: ChatRequest, db: Session = Depends(get_db)):
     return {
         "response": response_data["response"]
     }
+
 
