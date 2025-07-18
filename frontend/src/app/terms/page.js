@@ -6,6 +6,9 @@ import { useEffect } from "react";
 import "aos/dist/aos.css";
 import { AiOutlineHome, AiOutlineLogout } from "react-icons/ai";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+
 export default function TermsPage() {
   const [consentGiven, setConsentGiven] = useState(false);
   const router = useRouter();
@@ -14,13 +17,37 @@ export default function TermsPage() {
     AOS.init({ duration: 1000 });
   }, []);
 
-  const handleProceed = () => {
-    if (consentGiven) {
-      router.push("/demographics");
-    } else {
-      alert("❌ Consent is mandatory to proceed.");
+  const handleProceed = async () => {
+  if (!consentGiven) {
+    alert("❌ Consent is mandatory to proceed.");
+    return;
+  }
+
+  const email = localStorage.getItem("email"); // keep consistent with demographics.js
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/user/consent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        consent_given: true,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to log consent");
     }
-  };
+
+    // Success: redirect to demographics
+    router.push("/demographics");
+  } catch (error) {
+    console.error("Consent logging failed:", error);
+    alert("Something went wrong while saving your consent.");
+  }
+};
 
   return (
     <div className="relative min-h-screen bg-black text-white flex items-center justify-center">
