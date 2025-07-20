@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import User
 from schemas import UserCreate, UserLogin
-from routes.utils import hash_password, verify_password, create_access_token
+from routes.utils import hash_password, verify_password, create_access_token, assign_llm_version_to_user
 
 
 router = APIRouter()
@@ -15,7 +15,8 @@ def signup(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
 
     hashed_password = hash_password(user.password)
-    new_user = User(email=user.email, password=hashed_password, name=user.name)
+    llm_version = assign_llm_version_to_user(db)
+    new_user = User(email=user.email, password=hashed_password, name=user.name, llm_version=llm_version)
     
     db.add(new_user)
     db.commit()

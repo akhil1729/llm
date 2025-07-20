@@ -45,3 +45,8 @@ class ConsentLogSchema(BaseModel):
     email: str
     consent_given: bool
 
+class GoogleClickRequest(BaseModel):
+    email: str
+    task_number: int
+
+

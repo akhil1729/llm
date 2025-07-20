@@ -7,6 +7,7 @@ import DOMPurify from "dompurify"; // Make sure to install this: npm install dom
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const INACTIVITY_LIMIT = 10 * 60 * 1000; // 10 min
+const TASK_NUMBER=3
 
 export default function Task3Page() {
   const [messages, setMessages] = useState([]);
@@ -47,83 +48,102 @@ export default function Task3Page() {
   }, [messages]);
 
   const sendMessage = async () => {
-  if (!input.trim()) return;
-  const email = localStorage.getItem("email");
-  if (!email) {
-    alert("Please login again.");
-    router.push("/login");
-    return;
-  }
-
-  const userMessage = { text: input, sender: "user" };
-  setMessages((prev) => [...prev, userMessage]);
-  setInput("");
-  setIsLoading(true);
-
-  try {
-    const res = await axios.post(`${API_BASE_URL}/chat`, {
-      email,
-      message: input.trim(),
-      task_number: 3, // Update dynamically for task2, task3
-    });
-    const botReply = { text: res.data.response, sender: "bot" };
-    setMessages((prev) => [...prev, botReply]);
-  } catch (error) {
-    if (error.response?.status === 403) {
-      alert("⚠️ You have exceeded your 100-query limit. You are now being logged out.");
-      localStorage.clear();
-      router.push("/");
+    if (!input.trim()) return;
+    const email = localStorage.getItem("email");
+    if (!email) {
+      alert("Please login again.");
+      router.push("/login");
       return;
     }
 
-    setMessages((prev) => [
-      ...prev,
-      { text: "❌ Error fetching response.", sender: "bot" },
-    ]);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    const userMessage = { text: input, sender: "user" };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
 
+    try {
+      const res = await axios.post(`${API_BASE_URL}/chat`, {
+        email,
+        message: input.trim(),
+        task_number: TASK_NUMBER,
+      });
+      const botReply = { text: res.data.response, sender: "bot" };
+      setMessages((prev) => [...prev, botReply]);
+    } catch (error) {
+      if (error.response?.status === 403) {
+        alert("⚠️ You have exceeded your 100-query limit. You are now being logged out.");
+        localStorage.clear();
+        router.push("/");
+        return;
+      }
 
+      setMessages((prev) => [
+        ...prev,
+        { text: "❌ Error fetching response.", sender: "bot" },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmitFinalAnswer = async () => {
-  if (!finalAnswer.trim()) {
-    alert("Please enter your final answer before submitting.");
-    return;
-  }
-  const email = localStorage.getItem("email");
-  if (!email) {
-    alert("User email not found. Please login again.");
-    router.push("/login");
-    return;
-  }
+    if (!finalAnswer.trim()) {
+      alert("Please enter your final answer before submitting.");
+      return;
+    }
+    const email = localStorage.getItem("email");
+    if (!email) {
+      alert("User email not found. Please login again.");
+      router.push("/login");
+      return;
+    }
 
-  try {
-    await axios.post(`${API_BASE_URL}/finalanswer`, {
-      email,
-      task_number: 3, // Keep constant per task file
-      final_answer: finalAnswer.trim(),
-    });
+    try {
+      await axios.post(`${API_BASE_URL}/finalanswer`, {
+        email,
+        task_number: TASK_NUMBER,
+        final_answer: finalAnswer.trim(),
+      });
 
-    const taskOrder = JSON.parse(localStorage.getItem("taskOrder"));
-const currentPath = window.location.pathname;
-const currentIndex = taskOrder.findIndex((p) => p === currentPath);
-const nextPath = taskOrder[currentIndex + 1] || "/survey";
-router.push(nextPath);
+      const taskOrder = JSON.parse(localStorage.getItem("taskOrder"));
+      const currentPath = window.location.pathname;
+      const currentIndex = taskOrder.findIndex((p) => p === currentPath);
+      const nextPath = taskOrder[currentIndex + 1] || "/survey";
+      router.push(nextPath);
+    } catch (error) {
+      console.error("Error submitting final answer:", error);
+      alert("❌ Failed to save final answer. Please try again.");
+    }
+  };
 
-  } catch (error) {
-    console.error("Error submitting final answer:", error);
-    alert("❌ Failed to save final answer. Please try again.");
-  }
-};
+  const handleGoogleClick = async () => {
+    const email = localStorage.getItem("email");
+    if (!email) {
+      alert("User email not found. Please login again.");
+      router.push("/login");
+      return;
+    }
 
+    try {
+      await axios.post(`${API_BASE_URL}/google-click`, {
+        email,
+        task_number: TASK_NUMBER,
+      });
+    } catch (error) {
+      console.error("Failed to log Google click:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-white">
       <div className="flex justify-between items-center px-6 py-4 bg-gray-900 shadow-md sticky top-0 z-20">
         <h1 className="text-xl font-bold text-cyan-300">Aletheia</h1>
-        <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://www.google.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={handleGoogleClick}
+        >
           <Image src="/google.svg" alt="Google" width={256} height={256} className="cursor-pointer" />
         </a>
       </div>

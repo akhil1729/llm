@@ -34,7 +34,8 @@ def chat_and_save(request: ChatRequest, db: Session = Depends(get_db)):
     if query_count >= 100:
         raise HTTPException(status_code=403, detail="❌ You have exceeded the 100-query limit.")
 
-    personality_index = assign_model_round_robin(db)
+    personality_index = user.llm_version
+
     hallucinate = flip_coin(probability=0.5)
 
     response_data = generate_response(request.message)

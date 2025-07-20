@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import auth, user, chat, demographics, finalanswer, survey, consent
+from routes import auth, user, chat, demographics, finalanswer, survey, consent, google_click
 from database import engine, Base, SessionLocal
 from models import ModelAssignment
 from sqlalchemy.orm import Session
@@ -36,6 +36,8 @@ app.include_router(demographics.router, prefix="/user/demographics", tags=["demo
 app.include_router(finalanswer.router, prefix="/finalanswer", tags=["finalanswer"])
 app.include_router(survey.router, prefix="/survey", tags=["survey"])
 app.include_router(consent.router)
+app.include_router(google_click.router, prefix="/google-click", tags=["Google Click"])
+
 @app.get("/")
 def root():
     return {"message": "FastAPI is running with CORS enabled!"}

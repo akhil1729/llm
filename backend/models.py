@@ -11,7 +11,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
-
+    llm_version = Column(Integer, nullable=True)
     chats = relationship("Chat", back_populates="user")
     demographics = relationship("Demographics", back_populates="user", uselist=False)
 
@@ -89,5 +89,16 @@ class Survey(Base):
     timestamp = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User")
+
+class GoogleClick(Base):
+    __tablename__ = "google_clicks"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    task_number = Column(Integer, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+
 
 

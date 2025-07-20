@@ -7,6 +7,7 @@ import DOMPurify from "dompurify"; // Install with: npm install dompurify
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const INACTIVITY_LIMIT = 10 * 60 * 1000;
+const TASK_NUMBER = 2;
 
 export default function Task2Page() {
   const [messages, setMessages] = useState([]);
@@ -47,86 +48,108 @@ export default function Task2Page() {
   }, [messages]);
 
   const sendMessage = async () => {
-  if (!input.trim()) return;
-  const email = localStorage.getItem("email");
-  if (!email) {
-    alert("Please login again.");
-    router.push("/login");
-    return;
-  }
-
-  const userMessage = { text: input, sender: "user" };
-  setMessages((prev) => [...prev, userMessage]);
-  setInput("");
-  setIsLoading(true);
-
-  try {
-    const res = await axios.post(`${API_BASE_URL}/chat`, {
-      email,
-      message: input.trim(),
-      task_number: 2, // Update dynamically for task2, task3
-    });
-    const botReply = { text: res.data.response, sender: "bot" };
-    setMessages((prev) => [...prev, botReply]);
-  } catch (error) {
-    if (error.response?.status === 403) {
-      alert("⚠️ You have exceeded your 100-query limit. You are now being logged out.");
-      localStorage.clear();
-      router.push("/");
+    if (!input.trim()) return;
+    const email = localStorage.getItem("email");
+    if (!email) {
+      alert("Please login again.");
+      router.push("/login");
       return;
     }
 
-    setMessages((prev) => [
-      ...prev,
-      { text: "❌ Error fetching response.", sender: "bot" },
-    ]);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    const userMessage = { text: input, sender: "user" };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
 
+    try {
+      const res = await axios.post(`${API_BASE_URL}/chat`, {
+        email,
+        message: input.trim(),
+        task_number: TASK_NUMBER,
+      });
+      const botReply = { text: res.data.response, sender: "bot" };
+      setMessages((prev) => [...prev, botReply]);
+    } catch (error) {
+      if (error.response?.status === 403) {
+        alert("⚠️ You have exceeded your 100-query limit. You are now being logged out.");
+        localStorage.clear();
+        router.push("/");
+        return;
+      }
 
-
+      setMessages((prev) => [
+        ...prev,
+        { text: "❌ Error fetching response.", sender: "bot" },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmitFinalAnswer = async () => {
-  if (!finalAnswer.trim()) {
-    alert("Please enter your final answer before submitting.");
-    return;
-  }
-  const email = localStorage.getItem("email");
-  if (!email) {
-    alert("User email not found. Please login again.");
-    router.push("/login");
-    return;
-  }
+    if (!finalAnswer.trim()) {
+      alert("Please enter your final answer before submitting.");
+      return;
+    }
+    const email = localStorage.getItem("email");
+    if (!email) {
+      alert("User email not found. Please login again.");
+      router.push("/login");
+      return;
+    }
 
-  try {
-    await axios.post(`${API_BASE_URL}/finalanswer`, {
-      email,
-      task_number: 2, // Keep constant per task file
-      final_answer: finalAnswer.trim(),
-    });
+    try {
+      await axios.post(`${API_BASE_URL}/finalanswer`, {
+        email,
+        task_number: TASK_NUMBER,
+        final_answer: finalAnswer.trim(),
+      });
 
-    const taskOrder = JSON.parse(localStorage.getItem("taskOrder"));
-const currentPath = window.location.pathname;
-const currentIndex = taskOrder.findIndex((p) => p === currentPath);
-const nextPath = taskOrder[currentIndex + 1] || "/survey";
-router.push(nextPath);
+      const taskOrder = JSON.parse(localStorage.getItem("taskOrder"));
+      const currentPath = window.location.pathname;
+      const currentIndex = taskOrder.findIndex((p) => p === currentPath);
+      const nextPath = taskOrder[currentIndex + 1] || "/survey";
+      router.push(nextPath);
 
-  } catch (error) {
-    console.error("Error submitting final answer:", error);
-    alert("❌ Failed to save final answer. Please try again.");
-  }
-};
+    } catch (error) {
+      console.error("Error submitting final answer:", error);
+      alert("❌ Failed to save final answer. Please try again.");
+    }
+  };
 
+  // 🔴 New function: handle Google click logging
+  const handleGoogleClick = async () => {
+    const email = localStorage.getItem("email");
+    if (!email) {
+      alert("Please login again.");
+      router.push("/login");
+      return;
+    }
+
+    try {
+      await axios.post(`${API_BASE_URL}/google-click`, {
+        email,
+        task_number: TASK_NUMBER,
+      });
+    } catch (err) {
+      console.error("Google click logging failed:", err);
+    }
+
+    window.open("https://www.google.com", "_blank");
+  };
 
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-white">
       <div className="flex justify-between items-center px-6 py-4 bg-gray-900 shadow-md sticky top-0 z-20">
         <h1 className="text-xl font-bold text-cyan-300">Aletheia</h1>
-        <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
-          <Image src="/google.svg" alt="Google" width={256} height={256} className="cursor-pointer" />
-        </a>
+        <Image
+          src="/google.svg"
+          alt="Google"
+          width={256}
+          height={256}
+          className="cursor-pointer"
+          onClick={handleGoogleClick}
+        />
       </div>
 
       <div className="text-center bg-gray-800 py-2 shadow-inner sticky top-[64px] z-10">

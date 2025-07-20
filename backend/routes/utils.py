@@ -65,3 +65,27 @@ def assign_model_round_robin(db: Session) -> int:
 
     db.commit()
     return selected
+
+def assign_llm_version_to_user(db: Session) -> int:
+    """Assign fixed LLM behavior to user using round-robin from ModelAssignment"""
+    assignment = db.query(ModelAssignment).first()
+    if not assignment:
+        raise Exception("ModelAssignment table not seeded")
+
+    counts = {
+        0: assignment.default_count,
+        1: assignment.benevolent_count,
+        2: assignment.authoritarian_count,
+    }
+    selected = min(counts, key=counts.get)
+
+    if selected == 0:
+        assignment.default_count += 1
+    elif selected == 1:
+        assignment.benevolent_count += 1
+    else:
+        assignment.authoritarian_count += 1
+
+    db.commit()
+    return selected
+
