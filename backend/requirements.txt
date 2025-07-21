@@ -12,3 +12,4 @@ xarray==2024.7.0
 numpy==2.0.2
 torch==2.2.2
 torchvision==0.17.2
+passlib==1.7.4
