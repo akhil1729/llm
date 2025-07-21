@@ -3,12 +3,12 @@ uvicorn==0.34.0
 SQLAlchemy==2.0.38
 python-dotenv==1.0.1
 pydantic==2.10.6
-pydantic_core==2.27.2
-psycopg2-binary==2.9.9         # Required if using PostgreSQL
-httpx==0.28.1                   # For async HTTP requests (e.g., LLM calls)
-requests==2.32.3               # Optional, for sync external requests
-python-json-logger==3.2.1      # For structured logging
-xarray==2024.7.0               # If you're using xarray for scientific data
-numpy==2.2.2                   # If you're doing numeric calculations
-torch==2.6.0                   # If your LLM logic needs it
-torchvision==0.21.0            # If you’re doing image processing
+pydantic-core==2.16.3          # Compatible with pydantic v2.10.6 and Python 3.9
+psycopg2-binary==2.9.9
+httpx==0.28.1
+requests==2.32.3
+python-json-logger==3.2.1
+xarray==2024.7.0               # Latest version that works with Python 3.9+
+numpy==2.0.2                   # Highest stable NumPy version for Python 3.9
+torch==2.2.2                   # Last compatible stable version for Python 3.9
+torchvision==0.17.2           # Match with torch==2.2.2
