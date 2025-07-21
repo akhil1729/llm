@@ -3,13 +3,13 @@ uvicorn==0.34.0
 SQLAlchemy==2.0.38
 python-dotenv==1.0.1
 pydantic==2.10.6
-pydantic-core==2.27.2
+pydantic-core==2.27.2         # must match pydantic version!
 psycopg2-binary==2.9.9
 httpx==0.28.1
 requests==2.32.3
 python-json-logger==3.2.1
 xarray==2024.7.0
-numpy==2.0.2
+numpy==2.2.2
 torch==2.2.2
 torchvision==0.17.2
-passlib==1.7.4
+passlib==1.7.4                 # ✅ Add this line to fix the error
