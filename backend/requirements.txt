@@ -19,7 +19,8 @@ passlib==1.7.4
 PyJWT==2.8.0
 
 # Scientific computing support (if used in LLM logic)
-numpy==2.2.2
+numpy==1.26.4
+
 xarray==2025.1.2
 torch==2.6.0
 torchvision==0.21.0
