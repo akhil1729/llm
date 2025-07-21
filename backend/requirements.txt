@@ -8,7 +8,7 @@ psycopg2-binary==2.9.9         # Required if using PostgreSQL
 httpx==0.28.1                   # For async HTTP requests (e.g., LLM calls)
 requests==2.32.3               # Optional, for sync external requests
 python-json-logger==3.2.1      # For structured logging
-xarray==2025.1.2               # If you're using xarray for scientific data
+xarray==2024.7.0               # If you're using xarray for scientific data
 numpy==2.2.2                   # If you're doing numeric calculations
 torch==2.6.0                   # If your LLM logic needs it
 torchvision==0.21.0            # If you’re doing image processing
