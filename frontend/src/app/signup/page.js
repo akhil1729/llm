@@ -2,12 +2,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { AiOutlineUserAdd, AiOutlineHome, AiOutlineLogin } from "react-icons/ai";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import ClientSearchParams from "@/components/ClientSearchParams";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -15,19 +15,14 @@ export default function Signup() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [redirected, setRedirected] = useState(false); // ← new state
-  const searchParams = useSearchParams();
+
+  const handleRedirected = () => {
+    toast.warning("You must be logged in to access that page.", { theme: "dark" });
+  };
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
-
-    // Wrap useSearchParams logic in client-only effect
-    const param = searchParams.get("redirected");
-    if (param) {
-      setRedirected(true);
-      toast.warning("You must be logged in to access that page.", { theme: "dark" });
-    }
-  }, [searchParams]);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -67,6 +62,7 @@ export default function Signup() {
 
       {/* Toast */}
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar theme="dark" />
+      <ClientSearchParams onRedirected={handleRedirected} />
 
       {/* Navbar */}
       <nav className="absolute top-0 left-0 w-full px-10 py-4 flex justify-between items-center z-20 text-white">
