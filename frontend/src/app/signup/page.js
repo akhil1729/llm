@@ -9,7 +9,10 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import ClientSearchParams from "@/components/ClientSearchParams";
 
+export const dynamic = "force-dynamic"; // ✅ This tells Next.js to render this page dynamically
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 
 export default function Signup() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
