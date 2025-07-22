@@ -1,4 +1,7 @@
 "use client";
+
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
@@ -9,19 +12,13 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import ClientSearchParams from "@/components/ClientSearchParams";
 
-export const dynamic = "force-dynamic"; // ✅ This tells Next.js to render this page dynamically
-
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 
 export default function Signup() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-
-  const handleRedirected = () => {
-    toast.warning("You must be logged in to access that page.", { theme: "dark" });
-  };
+  const [redirected, setRedirected] = useState(null);
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -65,7 +62,6 @@ export default function Signup() {
 
       {/* Toast */}
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar theme="dark" />
-      <ClientSearchParams onRedirected={handleRedirected} />
 
       {/* Navbar */}
       <nav className="absolute top-0 left-0 w-full px-10 py-4 flex justify-between items-center z-20 text-white">
@@ -82,6 +78,17 @@ export default function Signup() {
           </Link>
         </div>
       </nav>
+
+      {/* SearchParams logic in Suspense */}
+      <ClientSearchParams
+        onParams={(params) => {
+          const redirectedParam = params.get("redirected");
+          if (redirectedParam) {
+            setRedirected(redirectedParam);
+            toast.warning("You must be logged in to access that page.", { theme: "dark" });
+          }
+        }}
+      />
 
       {/* Form Card */}
       <div

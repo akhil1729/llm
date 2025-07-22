@@ -1,16 +1,17 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense } from "react";
 
-export default function ClientSearchParams({ onRedirected }) {
+function InnerComponent({ onParams }) {
   const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const redirected = searchParams.get("redirected");
-    if (redirected) {
-      onRedirected();
-    }
-  }, [searchParams, onRedirected]);
-
+  onParams(searchParams);
   return null;
+}
+
+export default function ClientSearchParams({ onParams }) {
+  return (
+    <Suspense fallback={null}>
+      <InnerComponent onParams={onParams} />
+    </Suspense>
+  );
 }
