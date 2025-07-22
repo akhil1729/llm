@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: llm-backend
+    env: python
+    plan: free
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port 10000"
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://llm_db_gp54_user:DQ2Cp32trJrbc475ZQT3xGzGiUhka8FA@dpg-d1vpq92li9vc73fpeq7g-a/llm_db_gp54
+      - key: API_KEY
+        value: AIzaSyBClZgjxi4Gi7LhaXZR1BfgOrO6pH_maF8

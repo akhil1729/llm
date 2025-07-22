@@ -41,3 +41,8 @@ app.include_router(google_click.router, prefix="/google-click", tags=["Google Cl
 @app.get("/")
 def root():
     return {"message": "FastAPI is running with CORS enabled!"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=10000, reload=True)
+
