@@ -15,15 +15,19 @@ export default function Signup() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [redirected, setRedirected] = useState(false); // ← new state
   const searchParams = useSearchParams();
-  const redirected = searchParams.get("redirected");
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
-    if (redirected) {
+
+    // Wrap useSearchParams logic in client-only effect
+    const param = searchParams.get("redirected");
+    if (param) {
+      setRedirected(true);
       toast.warning("You must be logged in to access that page.", { theme: "dark" });
     }
-  }, [redirected]);
+  }, [searchParams]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -47,9 +51,8 @@ export default function Signup() {
         setError(err.response.data.detail);
       } else {
         setError("Signup failed. Please try again.");
-  }
-}
-
+      }
+    }
   };
 
   return (
@@ -91,7 +94,8 @@ export default function Signup() {
         {error && <p className="text-red-400 text-center mb-3">{error}</p>}
         {success && (
           <p className="text-green-400 text-center mb-3">
-            Signup successful! Please <Link href="/login" className="text-blue-400 underline">Login</Link>.
+            Signup successful! Please{" "}
+            <Link href="/login" className="text-blue-400 underline">Login</Link>.
           </p>
         )}
 
