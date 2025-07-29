@@ -48,9 +48,7 @@ export default function DemographicsForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "age") {
-      setAgeError(+value < 18);
-    }
+    if (name === "age") setAgeError(+value < 18);
     setForm({ ...form, [name]: value });
   };
 
@@ -88,7 +86,7 @@ export default function DemographicsForm() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white px-4">
         <CheckCircleIcon className="h-24 w-24 text-green-400 mb-4" />
         <h2 className="text-2xl font-bold">Thank you! Redirecting...</h2>
       </div>
@@ -96,18 +94,14 @@ export default function DemographicsForm() {
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 text-white bg-black overflow-hidden">
-      <img
-        src="/ai-bg.png"
-        alt="Background"
-        className="absolute inset-0 w-full h-full object-cover opacity-20"
-      />
+    <div className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 text-white bg-black overflow-hidden">
+      <img src="/ai-bg.png" alt="Background" className="absolute inset-0 w-full h-full object-cover opacity-20" />
       <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-80"></div>
 
       {/* Navbar */}
-      <nav className="absolute top-0 left-0 w-full px-10 py-4 flex justify-between items-center z-20 text-white">
+      <nav className="absolute top-0 left-0 w-full px-4 sm:px-8 py-4 flex flex-wrap justify-between items-center z-20 text-white">
         <div className="text-2xl font-bold tracking-wider">Aletheia</div>
-        <div className="flex space-x-6 text-lg font-medium">
+        <div className="flex flex-wrap gap-4 text-sm sm:text-lg font-medium mt-2 sm:mt-0">
           <a href="/" className="hover:text-pink-400 flex items-center gap-1">
             <AiOutlineHome /> Home
           </a>
@@ -124,11 +118,8 @@ export default function DemographicsForm() {
       </nav>
 
       {/* Form Card */}
-      <div
-        className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto p-8 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-green-400/20 transition duration-500"
-        data-aos="zoom-in"
-      >
-        <h2 className="text-3xl font-bold mb-6 text-center">Demographics Form</h2>
+      <div className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 md:p-10 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-green-400/20 transition duration-500 mt-24 mb-10">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Demographics Form</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2">
@@ -144,7 +135,6 @@ export default function DemographicsForm() {
                 className="w-full p-3 rounded bg-gray-900 border border-gray-700"
               />
             </div>
-
             <div className="w-full md:w-1/2">
               <label htmlFor="age" className="block text-sm font-semibold mb-1 flex items-center gap-1">
                 Age
@@ -158,15 +148,12 @@ export default function DemographicsForm() {
                 required
                 className={`w-full p-3 rounded bg-gray-900 border ${ageError ? "border-red-500" : "border-gray-700"}`}
               />
-              {ageError && (
-                <p className="text-red-400 text-sm mt-1">You must be 18 or older to participate.</p>
-              )}
+              {ageError && <p className="text-red-400 text-sm mt-1">You must be 18 or older to participate.</p>}
             </div>
           </div>
 
-          {/* Gender */}
           <div>
-            <label className="block text-sm font-semibold mb-1">Check all that apply</label>
+            <label className="block text-sm font-semibold mb-1">Gender Identity (check all that apply)</label>
             <div className="flex flex-wrap gap-4 text-sm text-gray-300">
               {["Male", "Female", "None of the above", "Prefer not to answer"].map((option, idx) => (
                 <label key={idx} className="flex items-center gap-1">
@@ -182,9 +169,8 @@ export default function DemographicsForm() {
             </div>
           </div>
 
-          {/* Race/Ethnicity */}
           <div>
-            <label className="block text-sm font-semibold mb-1">Check all that apply</label>
+            <label className="block text-sm font-semibold mb-1">Race/Ethnicity (check all that apply)</label>
             <div className="flex flex-wrap gap-4 text-sm text-gray-300">
               {[
                 "White/Caucasian",
@@ -194,7 +180,7 @@ export default function DemographicsForm() {
                 "Latino/Hispanic",
                 "Middle-eastern/North African",
                 "None of the above",
-                "Prefer not to answer"
+                "Prefer not to answer",
               ].map((option, idx) => (
                 <label key={idx} className="flex items-center gap-1">
                   <input
@@ -209,7 +195,6 @@ export default function DemographicsForm() {
             </div>
           </div>
 
-          {/* Education */}
           <div>
             <label htmlFor="education" className="block text-sm font-semibold mb-1">Education</label>
             <select
@@ -227,7 +212,6 @@ export default function DemographicsForm() {
             </select>
           </div>
 
-          {/* College Major */}
           <div>
             <label htmlFor="college_major" className="block text-sm font-semibold mb-1">College Major</label>
             <select
@@ -249,7 +233,6 @@ export default function DemographicsForm() {
             </select>
           </div>
 
-          {/* Chatbot Usage */}
           <div>
             <label htmlFor="chatbot_usage" className="block text-sm font-semibold mb-1">Chatbot Usage Frequency</label>
             <select

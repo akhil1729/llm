@@ -1,13 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AOS from "aos";
-import { useEffect } from "react";
 import "aos/dist/aos.css";
 import { AiOutlineHome, AiOutlineLogout } from "react-icons/ai";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 
 export default function TermsPage() {
   const [consentGiven, setConsentGiven] = useState(false);
@@ -18,68 +16,61 @@ export default function TermsPage() {
   }, []);
 
   const handleProceed = async () => {
-  if (!consentGiven) {
-    alert("❌ Consent is mandatory to proceed.");
-    return;
-  }
-
-  const email = localStorage.getItem("email"); // keep consistent with demographics.js
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/user/consent`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        consent_given: true,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to log consent");
+    if (!consentGiven) {
+      alert("❌ Consent is mandatory to proceed.");
+      return;
     }
 
-    // Success: redirect to demographics
-    router.push("/demographics");
-  } catch (error) {
-    console.error("Consent logging failed:", error);
-    alert("Something went wrong while saving your consent.");
-  }
-};
+    const email = localStorage.getItem("email");
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/user/consent`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          consent_given: true,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to log consent");
+
+      router.push("/demographics");
+    } catch (error) {
+      console.error("Consent logging failed:", error);
+      alert("Something went wrong while saving your consent.");
+    }
+  };
 
   return (
-    <div className="relative min-h-screen bg-black text-white flex items-center justify-center">
-      {/* Background */}
+    <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-center px-4 sm:px-8">
+      {/* Background Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-80"></div>
 
       {/* Navbar */}
-      <nav className="absolute top-0 left-0 w-full px-8 py-4 flex justify-between items-center z-20 text-white">
+      <nav className="absolute top-0 left-0 w-full px-4 sm:px-8 md:px-10 py-4 flex flex-wrap justify-between items-center z-20 text-white">
         <div className="text-2xl font-bold tracking-wider">Aletheia</div>
-        <div className="flex space-x-6 text-lg font-medium">
+        <div className="flex flex-wrap gap-4 text-base sm:text-lg font-medium mt-2 sm:mt-0">
           <a href="/" className="hover:text-pink-400 flex items-center gap-1">
             <AiOutlineHome /> Home
           </a>
-          <a
-            href="/login"
-            className="hover:text-pink-400 flex items-center gap-1"
-          >
+          <a href="/login" className="hover:text-pink-400 flex items-center gap-1">
             <AiOutlineLogout /> Logout
           </a>
         </div>
       </nav>
 
-      {/* Card */}
+      {/* Consent Card */}
       <div
-        className="relative z-10 w-full max-w-3xl p-8 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-pink-400/20 transition duration-500"
+        className="relative z-10 w-full max-w-3xl p-6 sm:p-8 md:p-10 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-pink-400/20 transition duration-500 mt-24 mb-10"
         data-aos="fade-up"
       >
-        <h2 className="text-3xl font-bold mb-4 text-center">
-          Terms & Conditions
-        </h2>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-center">Terms & Conditions</h2>
 
-        <div className="h-96 overflow-y-auto p-4 rounded-lg bg-black/40 border border-gray-700 text-sm space-y-4">
+        <div className="h-96 overflow-y-auto p-4 rounded-lg bg-black/40 border border-gray-700 text-sm space-y-4 text-gray-100">
+          {/* ...Long terms text left unchanged for brevity... */}
           <p>
             Thank you for agreeing to participate in our study.
             <br />
@@ -177,23 +168,26 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="mt-4 flex items-center gap-2 text-sm">
+        {/* Consent Checkbox */}
+        <div className="mt-4 flex items-start gap-2 text-sm sm:text-base">
           <input
             type="checkbox"
             id="consent"
             checked={consentGiven}
             onChange={(e) => setConsentGiven(e.target.checked)}
+            className="mt-1"
           />
-          <label htmlFor="consent">
+          <label htmlFor="consent" className="text-gray-300">
             I have read and consent to the terms and conditions above.
           </label>
         </div>
 
+        {/* Proceed Button */}
         <button
           onClick={handleProceed}
           className="w-full mt-4 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold transition shadow-lg"
         >
-           Continue
+          Continue
         </button>
       </div>
     </div>

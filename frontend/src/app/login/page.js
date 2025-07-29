@@ -28,8 +28,6 @@ export default function Login() {
       const token = res.data.access_token;
       localStorage.setItem("token", token);
       localStorage.setItem("email", email);
-
-      // Direct user to /terms after successful login
       router.push("/terms");
     } catch {
       toast.error("Invalid credentials. Please try again.");
@@ -37,7 +35,7 @@ export default function Login() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center text-white bg-black overflow-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-center text-white bg-black overflow-hidden px-4 sm:px-8">
       {/* Background Image */}
       <img
         src="/ai-bg.png"
@@ -50,9 +48,9 @@ export default function Login() {
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar theme="dark" />
 
       {/* Navbar */}
-      <nav className="absolute top-0 left-0 w-full px-10 py-4 flex justify-between items-center z-20 text-white">
+      <nav className="absolute top-0 left-0 w-full px-4 sm:px-8 md:px-10 py-4 flex flex-wrap justify-between items-center z-20 text-white">
         <div className="text-2xl font-bold tracking-wider">Aletheia</div>
-        <div className="flex space-x-6 text-lg font-medium">
+        <div className="flex flex-wrap gap-4 text-base sm:text-lg font-medium mt-2 sm:mt-0">
           <Link href="/" className="hover:text-pink-400 flex items-center gap-1">
             <AiOutlineHome /> Home
           </Link>
@@ -67,10 +65,10 @@ export default function Login() {
 
       {/* Login Form Card */}
       <div
-        className="relative z-10 max-w-md w-full p-10 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-green-500/20 transition duration-500"
+        className="relative z-10 w-full max-w-md p-6 sm:p-8 md:p-10 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-green-500/20 transition duration-500"
         data-aos="zoom-in"
       >
-        <h2 className="text-4xl font-bold text-center mb-6 drop-shadow-lg">Login</h2>
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-6 drop-shadow-lg">Login</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input

@@ -109,7 +109,7 @@ export default function Home() {
             About Aletheia
           </h2>
           <p className="text-gray-200 text-sm sm:text-base text-center">
-            Aletheia is an AI-powered assistant designed to study and enhance the
+            Aletheia is an AI assistant designed to study and enhance the
             understanding of AI trustworthiness and human-AI interaction.
           </p>
         </motion.div>
