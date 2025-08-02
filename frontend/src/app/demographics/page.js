@@ -153,7 +153,7 @@ export default function DemographicsForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-1">Gender Identity (check all that apply)</label>
+            <label className="block text-sm font-semibold mb-1">Check all that apply</label>
             <div className="flex flex-wrap gap-4 text-sm text-gray-300">
               {["Male", "Female", "None of the above", "Prefer not to answer"].map((option, idx) => (
                 <label key={idx} className="flex items-center gap-1">
@@ -170,7 +170,7 @@ export default function DemographicsForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-1">Race/Ethnicity (check all that apply)</label>
+            <label className="block text-sm font-semibold mb-1">Check all that apply</label>
             <div className="flex flex-wrap gap-4 text-sm text-gray-300">
               {[
                 "White/Caucasian",
@@ -179,6 +179,7 @@ export default function DemographicsForm() {
                 "Native Hawaiian/Pacific Islander",
                 "Latino/Hispanic",
                 "Middle-eastern/North African",
+                "Native American/Alaska Native",
                 "None of the above",
                 "Prefer not to answer",
               ].map((option, idx) => (
@@ -209,6 +210,7 @@ export default function DemographicsForm() {
               <option value="Bachelor’s degree">Bachelor’s degree</option>
               <option value="Master’s or Doctorate degree">Master’s or Doctorate degree</option>
               <option value="Other">Other</option>
+              <option value="Prefer not to answer">Prefer not to answer</option>
             </select>
           </div>
 

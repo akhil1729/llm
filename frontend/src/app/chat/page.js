@@ -18,7 +18,7 @@ export default function ChatPage() {
   const router = useRouter();
   const logoutTimer = useRef(null);
 
-  const taskTitle = "History";
+  const taskTitle = "You'll use the chatbot Alethia to answer the question below. You can also verify answers with Google on the top right (opens a new tab).";
   const taskDescription =
     "Question: The Sykes-Picot Agreement of 1916 divided Ottoman lands between which two powers?";
 

@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Particles from "react-tsparticles";
-import { Typewriter } from "react-simple-typewriter";
 import { motion } from "framer-motion";
 import Tilt from "react-parallax-tilt";
+import { Typewriter } from "react-simple-typewriter";
 
 export default function Home() {
   useEffect(() => {
@@ -14,32 +14,31 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative flex flex-col md:flex-row min-h-screen text-white overflow-hidden">
-      {/* Animated Background */}
+    <div className="relative min-h-screen text-white overflow-hidden flex flex-col lg:flex-row items-center justify-center px-4 lg:px-20 py-10 gap-10">
+      {/* Background Image with Gradient */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <motion.div
-  className="absolute inset-0 z-0 overflow-hidden"
-  initial={{ scale: 1 }}
-  animate={{ scale: 1.4 }}
-  transition={{
-    duration: 5,
-    repeat: Infinity,
-    repeatType: "loop",
-    ease: "linear"
-  }}
->
-  <img
-    src="/ai-bg.avif"
-    alt="Background"
-    className="w-full h-full object-cover brightness-90"
-  />
-  <div className="absolute inset-0 bg-gradient-to-br from-[#0f2027]/40 via-[#203a43]/40 to-[#2c5364]/40" />
-</motion.div>
-
+          className="absolute inset-0 z-0"
+          initial={{ scale: 1 }}
+          animate={{ scale: 1.4 }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            repeatType: "loop",
+            ease: "linear",
+          }}
+        >
+          <img
+            src="/ai-bg.avif"
+            alt="Background"
+            className="w-full h-full object-cover brightness-90"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0f2027]/40 via-[#203a43]/40 to-[#2c5364]/40" />
+        </motion.div>
         <div className="absolute inset-0 bg-gradient-to-br from-[#0f2027]/80 via-[#203a43]/80 to-[#2c5364]/80" />
       </div>
 
-      {/* Particle Background */}
+      {/* Particle Animation */}
       <Particles
         className="absolute inset-0 z-0"
         options={{
@@ -53,21 +52,28 @@ export default function Home() {
         }}
       />
 
-      {/* Left Content with Animation */}
-      <motion.div
-        className="relative z-10 w-full md:w-1/2 flex flex-col justify-center items-start px-4 sm:px-8 md:px-16 py-10"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 leading-tight drop-shadow-xl">
+      {/* Left Section: Hero Text and Buttons */}
+      <div className="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-1/2 space-y-6">
+        <motion.h1
+          className="text-4xl sm:text-5xl font-extrabold leading-tight drop-shadow-xl"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
           Welcome to <span className="text-pink-500">Aletheia</span>
-        </h1>
-        <h2 className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-6">
+        </motion.h1>
+
+        <motion.h2
+          className="text-base sm:text-lg text-gray-300 max-w-md leading-relaxed"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2 }}
+        >
           <Typewriter
             words={[
               "An AI assistant for a research study by UMBC",
-              "An AI assistant for a research study by UMBC.",
+              "An AI assistant for a research study by UMBC",
+              "An AI assistant for a research study by UMBC",
             ]}
             loop
             cursor
@@ -76,44 +82,52 @@ export default function Home() {
             deleteSpeed={30}
             delaySpeed={2000}
           />
-        </h2>
-        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-          <Link href="/signup">
-            <button className="px-6 py-3 rounded-xl text-lg font-semibold bg-pink-600 hover:bg-pink-700 transition shadow-lg w-full sm:w-auto">
+        </motion.h2>
+
+        <motion.div
+          className="flex flex-col sm:flex-row items-center lg:justify-start gap-4 w-full max-w-xs"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.4 }}
+        >
+          <Link href="/signup" className="w-full sm:w-auto">
+            <button className="w-full sm:w-auto px-6 py-3 text-lg font-semibold rounded-xl bg-pink-600 hover:bg-pink-700 transition shadow-md">
               Get Started
             </button>
           </Link>
-          <Link href="/login">
-            <button className="px-6 py-3 rounded-xl text-lg font-semibold bg-white text-black hover:bg-gray-200 transition shadow-lg w-full sm:w-auto">
+          <Link href="/login" className="w-full sm:w-auto">
+            <button className="w-full sm:w-auto px-6 py-3 text-lg font-semibold rounded-xl bg-white text-black hover:bg-gray-200 transition shadow-md">
               Sign In
             </button>
           </Link>
-        </div>
-      </motion.div>
-
-      {/* Right Glass Card with Tilt & Animation */}
-      <Tilt
-        tiltMaxAngleX={5}
-        tiltMaxAngleY={5}
-        glareEnable={true}
-        glareMaxOpacity={0.2}
-        className="relative z-10 w-full md:w-1/2 flex items-center justify-center px-4 sm:px-8 md:px-10 py-8 md:py-0"
-      >
-        <motion.div
-          className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-8 md:p-10 w-full max-w-lg shadow-2xl hover:shadow-pink-500/30 transition duration-500"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 1 }}
-        >
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-center">
-            About Aletheia
-          </h2>
-          <p className="text-gray-200 text-sm sm:text-base text-center">
-            Aletheia is an AI assistant designed to study and enhance the
-            understanding of AI trustworthiness and human-AI interaction.
-          </p>
         </motion.div>
-      </Tilt>
+      </div>
+
+      {/* Right Section: About Aletheia Card */}
+      <div className="relative z-10 flex justify-center items-center w-full lg:w-1/2 px-6">
+        <Tilt
+          tiltMaxAngleX={5}
+          tiltMaxAngleY={5}
+          glareEnable={true}
+          glareMaxOpacity={0.2}
+          className="w-full max-w-md"
+        >
+          <motion.div
+            className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl px-6 py-8 shadow-xl hover:shadow-pink-500/30 transition duration-500"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 1 }}
+          >
+            <h2 className="text-xl sm:text-2xl font-bold mb-3 text-white text-center">
+              About Aletheia
+            </h2>
+            <p className="text-gray-300 text-sm sm:text-base text-center leading-relaxed">
+              Aletheia is an AI assistant designed to study and enhance the
+              understanding of human-AI interaction.
+            </p>
+          </motion.div>
+        </Tilt>
+      </div>
     </div>
   );
 }

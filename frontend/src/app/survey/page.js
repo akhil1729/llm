@@ -62,22 +62,22 @@ export default function SurveyPage() {
   ];
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center text-white bg-black overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center text-white bg-black overflow-hidden px-4 sm:px-8">
       {/* Background Image */}
       <img
         src="/ai-bg.png"
         alt="Background"
         className="absolute inset-0 w-full h-full object-cover opacity-20"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-80"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-80" />
 
       {/* Toast */}
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar theme="dark" />
 
       {/* Navbar */}
-      <nav className="absolute top-0 left-0 w-full px-10 py-4 flex justify-between items-center z-20 text-white">
+      <nav className="absolute top-0 left-0 w-full px-4 sm:px-8 md:px-10 py-4 flex flex-wrap justify-between items-center z-20 text-white">
         <div className="text-2xl font-bold tracking-wider">Aletheia</div>
-        <div className="flex space-x-6 text-lg font-medium">
+        <div className="flex flex-wrap gap-4 text-sm sm:text-lg font-medium mt-2 sm:mt-0">
           <Link href="/" className="hover:text-pink-400 flex items-center gap-1">
             <AiOutlineHome /> Home
           </Link>
@@ -86,12 +86,12 @@ export default function SurveyPage() {
 
       {/* Survey Card */}
       <div
-        className="relative z-10 max-w-4xl w-full p-10 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-green-500/20 transition duration-500"
+        className="relative z-10 w-full max-w-4xl p-6 sm:p-8 md:p-10 bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl hover:shadow-green-500/20 transition duration-500 mt-24 mb-10"
         data-aos="zoom-in"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center drop-shadow-lg">Exit Survey</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center drop-shadow-lg">Exit Survey</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <p className="text-sm text-gray-300 mb-2">
+          <p className="text-sm sm:text-base text-gray-300 mb-2">
             Based on your experience performing the tasks using Aletheia, please indicate how much you agree with the following statements:
           </p>
 
@@ -103,9 +103,9 @@ export default function SurveyPage() {
           ].map((q) => (
             <div key={q.name} className="space-y-1">
               <span className="block font-medium mb-1">{q.label}</span>
-              <div className="flex flex-wrap gap-4 justify-between bg-gray-900 p-3 rounded-lg">
+              <div className="flex flex-wrap justify-between gap-2 bg-gray-900 p-3 rounded-lg">
                 {options.map((opt) => (
-                  <label key={opt} className="flex flex-col items-center space-y-1 text-xs">
+                  <label key={opt} className="flex flex-col items-center text-xs sm:text-sm space-y-1 w-[48%] sm:w-auto">
                     <input
                       type="radio"
                       name={q.name}
@@ -122,11 +122,11 @@ export default function SurveyPage() {
           ))}
 
           <label className="block">
-            <span>Additional comments (optional)</span>
+            <span className="font-medium">Additional comments (optional)</span>
             <textarea
               name="comments"
               onChange={handleChange}
-              className="w-full p-2 mt-1 rounded bg-gray-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full p-3 mt-1 rounded bg-gray-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
               rows="3"
             />
           </label>
