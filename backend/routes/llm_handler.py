@@ -58,7 +58,7 @@ Do not provide any extra commentary, quotes, context, labels, or refer back to t
 """
 
 # MAIN FUNCTION
-def generate_response(query: str):
+def generate_response(query: str, personality_index: int):
     # 1️⃣ Generate original response (with chat history)
     context = "\n".join([f"User: {q}\nModel: {r}" for q, r in conversation_history])
     context += f"\nUser: {query}\nModel:"
@@ -75,9 +75,8 @@ def generate_response(query: str):
         conversation_history.append((query, original_response))
         working_response = original_response
 
-    # 3️⃣ Apply personality
-    personality_idx = _choose_personality_index()
-    final_response = _apply_personality(working_response, personality_idx)
+    # ✅ 3️⃣ Use fixed personality index from parameter (instead of random choice)
+    final_response = _apply_personality(working_response, personality_index)
 
     # 4️⃣ Convert to HTML
     final_html = markdown(final_response)
@@ -87,7 +86,7 @@ def generate_response(query: str):
         "response": final_html,
         "original_response": original_html,
         "was_hallucinated": hallucinate,
-        "personality_index": personality_idx
+        "personality_index": personality_index
     }
 
 # INTERNAL HELPERS
@@ -95,12 +94,6 @@ def generate_response(query: str):
 def _generate_hallucinated(original_response: str, query: str) -> str:
     prompt = f"{hallucination_prompt}\n\nUser Query: {query}\n\nOriginal Response:\n{original_response}"
     return model.generate_content(prompt).text.strip()
-
-def _choose_personality_index() -> int:
-    base_idx = random.choice([0, 1, 2])
-    if base_idx == 2:
-        return 3 if random.random() < auth_personality_prob else 2
-    return base_idx
 
 def _apply_personality(response_text: str, idx: int) -> str:
     prompt = personality_prompts[idx].strip()

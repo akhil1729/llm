@@ -71,7 +71,7 @@ export default function DebriefPage() {
           </p>
 
           <p>
-            Since the Questor chatbot may have introduced deliberate errors as
+            Since Aletheia may have introduced deliberate errors as
             part of the study, we have provided the correct answers to the
             questions below for your reference:
           </p>

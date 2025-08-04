@@ -38,7 +38,8 @@ def chat_and_save(request: ChatRequest, db: Session = Depends(get_db)):
 
     hallucinate = flip_coin(probability=0.5)
 
-    response_data = generate_response(request.message)
+    response_data = generate_response(request.message, personality_index)
+
 
     new_chat = Chat(
         user_id=user.id,
