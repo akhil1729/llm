@@ -201,7 +201,7 @@ export default function Task3Page() {
           onClick={handleSubmitFinalAnswer}
           className="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-md text-white font-bold"
         >
-          Submit Final Answer
+          Submit
         </button>
       </div>
     </div>
