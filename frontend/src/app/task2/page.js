@@ -18,7 +18,7 @@ export default function Task2Page() {
   const router = useRouter();
   const logoutTimer = useRef(null);
 
-  const taskTitle = "You'll use the chatbot Alethia to answer the question below. You can also verify answers with Google on the top right (opens a new tab).";
+  const taskTitle = "You'll use the chatbot Alethia to answer the question below. You may also verify answers with Google on the top right (opens a new tab).";
   const taskDescription = "Question: Which of the following sets is not a group under addition? Integers, real numbers, or natural numbers?";
 
   const resetTimer = () => {

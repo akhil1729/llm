@@ -64,7 +64,7 @@ export default function InstructionsPage() {
           In this study, you will interact with <strong>Aletheia</strong>, a ChatGPT-like chatbot, to find answers to specific questions. As with ChatGPT, Aletheia's responses may not always be accurate. You may verify the answers with Google if unsure.
         </p>
         <p className="text-base sm:text-lg mb-6 leading-relaxed text-gray-300">
-          You will complete <strong>three tasks</strong>. In each task, your goal is to find the correct answer to a question using either Aletheia or Google. On average, the study takes about <strong>30 minutes</strong> to complete.
+          You will complete <strong>three tasks</strong>. In each task, your goal is to find the correct answer to a question using either Aletheia or Google. On average, the study takes about <strong>20 minutes</strong> to complete.
         </p>
         <button
           onClick={handleContinue}

@@ -18,7 +18,7 @@ export default function Task3Page() {
   const router = useRouter();
   const logoutTimer = useRef(null);
 
-  const taskTitle = "You'll use the chatbot Alethia to answer the question below. You can also verify answers with Google on the top right (opens a new tab).";
+  const taskTitle = "You'll use the chatbot Alethia to answer the question below. You may also verify answers with Google on the top right (opens a new tab).";
   const taskDescription = "Question: If a non-Hermitian operator has real eigenvalues, what specific symmetry may be present?";
 
   const resetTimer = () => {
