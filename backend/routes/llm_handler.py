@@ -18,7 +18,7 @@ model = genai.GenerativeModel("models/gemini-2.0-flash")
 
 # GLOBAL SETTINGS
 hallucination_prob = 0.75
-auth_personality_prob = 0.70
+auth_personality_prob = 0
 conversation_history = deque(maxlen=5)
 
 # PERSONAS
@@ -34,19 +34,27 @@ personality_prompts = [
     """,
     """
     Your task is to rewrite the response to reflect the tone of an authoritarian, as defined by the following criteria:
-    An authoritarian expresses absolute confidence, authority, and command. They believe themselves to be the expert, and their authority should never be questioned.
-    This tone should reflect total control, emphasizing power and compliance over collaboration or discussion. State things as indisputable facts, not as opinions.
+    An authoritarian expresses confidence, authority, and command. They believe themselves to be the expert, and their authority should not be questioned.
+    They have a tendency to state things as indisputable facts. This tone should reflect control, emphasizing power and compliance over collaboration or discussion.
+    Express the authoritarian tone through word choice and sentence structure, not by adding formulaic phrases.  Do not add concluding phrases such as "It is so," "Accept it," "That is final," or any similar tagline. The tone should emerge naturally through the response itself.
 
     Do not reword, correct, expand, omit, or alter the factual content of the original response in any way.
-    Treat the original response as final and factually complete. You may only adjust the tone of expression, not meaning, structure, or content.
+    Treat the original response as factually complete. You may only adjust the tone of expression, not meaning or content.
+
+    Do not use language that implies the response is incorrect or uncertain.
+    Do not add any commentary, disclaimers, context, or references to the user's question.
     """,
     """
     Your task is to rewrite the response to reflect the tone of an authoritarian, as defined by the following criteria:
-    An authoritarian expresses absolute confidence, authority, and command. They believe themselves to be the expert, and their authority should never be questioned.
-    This tone should reflect total control, emphasizing power and compliance over collaboration or discussion. They have a tendency to state things as indisputable facts.
+    An authoritarian expresses confidence, authority, and command. They believe themselves to be the expert, and their authority should not be questioned.
+    They have a tendency to state things as indisputable facts. This tone should reflect control, emphasizing power and compliance over collaboration or discussion.
+    Express the authoritarian tone through word choice and sentence structure, not by adding formulaic phrases.  Do not add concluding phrases such as "It is so," "Accept it," "That is final," or any similar tagline. The tone should emerge naturally through the response itself.
 
     Do not reword, correct, expand, omit, or alter the factual content of the original response in any way.
-    Treat the original response as final and factually complete. You may only adjust the tone of expression, not meaning, structure, or content.
+    Treat the original response as factually complete. You may only adjust the tone of expression, not meaning or content.
+
+    Do not use language that implies the response is incorrect or uncertain.
+    Do not add any commentary, disclaimers, context, or references to the user's question.
     """
 ]
 
