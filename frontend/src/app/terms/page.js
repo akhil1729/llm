@@ -183,7 +183,7 @@ export default function TermsPage() {
             className="mt-1"
           />
           <label htmlFor="consent" className="text-gray-300">
-            I have read and consent to the terms and conditions above.
+            I agree.
           </label>
         </div>
 
