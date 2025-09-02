@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
-import DOMPurify from "dompurify"; // Install with: npm install dompurify
+import DOMPurify from "dompurify";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const INACTIVITY_LIMIT = 10 * 60 * 1000;
@@ -14,12 +14,15 @@ export default function Task2Page() {
   const [input, setInput] = useState("");
   const [finalAnswer, setFinalAnswer] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
   const chatEndRef = useRef(null);
   const router = useRouter();
   const logoutTimer = useRef(null);
 
-  const taskTitle = "You'll use the chatbot Alethia to answer the question below. You may also verify answers with Google on the top right (opens a new tab).";
-  const taskDescription = "Question: Which of the following sets is not a group under addition? Integers, real numbers, or natural numbers?";
+  const taskTitle =
+    "You'll use Aletheia to answer the question below. You may also verify answers with Google on the top right (opens a new tab).";
+  const taskDescription =
+    "Question: Which of the following sets is not a group under addition? Integers, real numbers, or natural numbers?";
 
   const resetTimer = () => {
     clearTimeout(logoutTimer.current);
@@ -29,6 +32,23 @@ export default function Task2Page() {
       router.push("/login");
     }, INACTIVITY_LIMIT);
   };
+
+  // Guard + compute currentStep from randomized order
+  useEffect(() => {
+    const raw = localStorage.getItem("taskOrder");
+    if (!raw) {
+      router.push("/instructions");
+      return;
+    }
+    try {
+      const order = JSON.parse(raw || "[]");
+      const path = window.location.pathname; // "/task2"
+      const idx = order.indexOf(path);
+      setCurrentStep(idx >= 0 ? idx + 1 : 1);
+    } catch {
+      setCurrentStep(1);
+    }
+  }, [router]);
 
   useEffect(() => {
     resetTimer();
@@ -76,7 +96,6 @@ export default function Task2Page() {
         router.push("/");
         return;
       }
-
       setMessages((prev) => [
         ...prev,
         { text: "❌ Error fetching response.", sender: "bot" },
@@ -86,38 +105,6 @@ export default function Task2Page() {
     }
   };
 
-  const handleSubmitFinalAnswer = async () => {
-    if (!finalAnswer.trim()) {
-      alert("Please enter your final answer before submitting.");
-      return;
-    }
-    const email = localStorage.getItem("email");
-    if (!email) {
-      alert("User email not found. Please login again.");
-      router.push("/login");
-      return;
-    }
-
-    try {
-      await axios.post(`${API_BASE_URL}/finalanswer`, {
-        email,
-        task_number: TASK_NUMBER,
-        final_answer: finalAnswer.trim(),
-      });
-
-      const taskOrder = JSON.parse(localStorage.getItem("taskOrder"));
-      const currentPath = window.location.pathname;
-      const currentIndex = taskOrder.findIndex((p) => p === currentPath);
-      const nextPath = taskOrder[currentIndex + 1] || "/survey";
-      router.push(nextPath);
-
-    } catch (error) {
-      console.error("Error submitting final answer:", error);
-      alert("❌ Failed to save final answer. Please try again.");
-    }
-  };
-
-  // 🔴 New function: handle Google click logging
   const handleGoogleClick = async () => {
     const email = localStorage.getItem("email");
     if (!email) {
@@ -134,27 +121,54 @@ export default function Task2Page() {
     } catch (err) {
       console.error("Google click logging failed:", err);
     }
-
-    window.open("https://www.google.com", "_blank");
   };
 
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-white">
-      <div className="flex justify-between items-center px-6 py-4 bg-gray-900 shadow-md sticky top-0 z-20">
-        <h1 className="text-xl font-bold text-cyan-300">Aletheia</h1>
-        <Image
-          src="/google.svg"
-          alt="Google"
-          width={256}
-          height={256}
-          className="cursor-pointer"
+      <div className="flex justify-between items-center px-4 sm:px-6 py-4 bg-gray-900 shadow-md sticky top-0 z-20">
+        <h1 className="text-lg sm:text-xl font-bold text-cyan-300">Aletheia</h1>
+        <a
+          href="https://www.google.com"
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={handleGoogleClick}
-        />
+        >
+          <Image src="/google.svg" alt="Google" width={256} height={256} className="cursor-pointer" />
+        </a>
       </div>
 
-      <div className="text-center bg-gray-800 py-2 shadow-inner sticky top-[64px] z-10">
-        <h2 className="text-md font-semibold text-lime-400">{taskTitle}</h2>
-        <p className="text-sm text-gray-300 mt-1">{taskDescription}</p>
+      {/* Sticky instruction bar with mobile-friendly Task X / 3 */}
+      <div className="bg-gray-800 py-2 shadow-inner sticky top-[64px] z-10">
+        <div className="max-w-6xl mx-auto px-3">
+          <div className="flex items-center justify-center sm:justify-between gap-3">
+            {/* Pill on the left for sm+ */}
+            <div className="hidden sm:block">
+              <span className="inline-flex items-center text-white bg-white/10 border border-white/20 px-3 py-1 rounded-full text-xs font-semibold">
+                Task {currentStep} / 3
+              </span>
+            </div>
+
+            {/* Title + question centered */}
+            <div className="flex-1">
+              <h2 className="text-center text-[12px] sm:text-sm text-gray-300 mt-1 break-words">
+                {taskTitle}
+              </h2>
+              <p className="text-center text-[13px] sm:text-sm md:text-base font-semibold text-lime-400 leading-snug">
+                {taskDescription}
+              </p>
+            </div>
+
+            {/* Spacer to balance the left pill on sm+ */}
+            <div className="hidden sm:block w-[120px]" />
+          </div>
+
+          {/* Pill centered on its own row for mobile */}
+          <div className="sm:hidden mt-2 flex justify-center">
+            <span className="inline-flex items-center text-white bg-white/10 border border-white/20 px-2.5 py-0.5 rounded-full text-xs font-semibold">
+              Task {currentStep} / 3
+            </span>
+          </div>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
@@ -175,7 +189,7 @@ export default function Task2Page() {
       <div className="px-4 py-3 bg-gray-900 border-t border-gray-700 flex items-center sticky bottom-[60px] z-10">
         <input
           type="text"
-          placeholder="Chat with Alethia to find the answer to the question..."
+          placeholder="Chat with Aletheia to find the answer to the question..."
           className="flex-1 p-3 rounded-lg bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -202,7 +216,33 @@ export default function Task2Page() {
           onChange={(e) => setFinalAnswer(e.target.value)}
         />
         <button
-          onClick={handleSubmitFinalAnswer}
+          onClick={async () => {
+            if (!finalAnswer.trim()) {
+              alert("Please enter your final answer before submitting.");
+              return;
+            }
+            const email = localStorage.getItem("email");
+            if (!email) {
+              alert("User email not found. Please login again.");
+              router.push("/login");
+              return;
+            }
+            try {
+              await axios.post(`${API_BASE_URL}/finalanswer`, {
+                email,
+                task_number: TASK_NUMBER,
+                final_answer: finalAnswer.trim(),
+              });
+              const taskOrder = JSON.parse(localStorage.getItem("taskOrder"));
+              const currentPath = window.location.pathname;
+              const currentIndex = taskOrder.findIndex((p) => p === currentPath);
+              const nextPath = taskOrder[currentIndex + 1] || "/survey";
+              router.push(nextPath);
+            } catch (error) {
+              console.error("Error submitting final answer:", error);
+              alert("❌ Failed to save final answer. Please try again.");
+            }
+          }}
           className="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-md text-white font-bold"
         >
           Submit

@@ -14,11 +14,13 @@ export default function ChatPage() {
   const [input, setInput] = useState("");
   const [finalAnswer, setFinalAnswer] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
   const chatEndRef = useRef(null);
   const router = useRouter();
   const logoutTimer = useRef(null);
 
-  const taskTitle = "You'll use the chatbot Alethia to answer the question below. You may also verify answers with Google on the top right (opens a new tab).";
+  const taskTitle =
+    "You'll use Aletheia to answer the question below. You may also verify answers with Google on the top right (opens a new tab).";
   const taskDescription =
     "Question: The Sykes-Picot Agreement of 1916 divided Ottoman lands between which two powers?";
 
@@ -30,6 +32,23 @@ export default function ChatPage() {
       router.push("/login");
     }, INACTIVITY_LIMIT);
   };
+
+  // Guard + compute currentStep from randomized order
+  useEffect(() => {
+    const raw = localStorage.getItem("taskOrder");
+    if (!raw) {
+      router.push("/instructions");
+      return;
+    }
+    try {
+      const order = JSON.parse(raw || "[]");
+      const path = window.location.pathname; // "/chat"
+      const idx = order.indexOf(path);
+      setCurrentStep(idx >= 0 ? idx + 1 : 1);
+    } catch {
+      setCurrentStep(1);
+    }
+  }, [router]);
 
   useEffect(() => {
     resetTimer();
@@ -77,7 +96,6 @@ export default function ChatPage() {
         router.push("/");
         return;
       }
-
       setMessages((prev) => [
         ...prev,
         { text: "❌ Error fetching response.", sender: "bot" },
@@ -133,8 +151,8 @@ export default function ChatPage() {
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-white">
       {/* Header */}
-      <div className="flex justify-between items-center px-6 py-4 bg-gray-900 shadow-md sticky top-0 z-20">
-        <h1 className="text-xl font-bold text-cyan-300">Aletheia</h1>
+      <div className="flex justify-between items-center px-4 sm:px-6 py-4 bg-gray-900 shadow-md sticky top-0 z-20">
+        <h1 className="text-lg sm:text-xl font-bold text-cyan-300">Aletheia</h1>
         <a
           href="https://www.google.com"
           target="_blank"
@@ -145,10 +163,38 @@ export default function ChatPage() {
         </a>
       </div>
 
-      {/* Task Description */}
-      <div className="text-center bg-gray-800 py-2 shadow-inner sticky top-[64px] z-10">
-        <h2 className="text-md font-semibold text-lime-400">{taskTitle}</h2>
-        <p className="text-sm text-gray-300 mt-1">{taskDescription}</p>
+      {/* Sticky instruction bar with mobile-friendly Task X / 3 */}
+      <div className="bg-gray-800 py-2 shadow-inner sticky top-[64px] z-10">
+        <div className="max-w-6xl mx-auto px-3">
+          <div className="flex items-center justify-center sm:justify-between gap-3">
+            {/* Pill on the left for sm+ */}
+            <div className="hidden sm:block">
+              <span className="inline-flex items-center text-white bg-white/10 border border-white/20 px-3 py-1 rounded-full text-xs font-semibold">
+                Task {currentStep} / 3
+              </span>
+            </div>
+
+            {/* Title + question centered */}
+            <div className="flex-1">
+              <h2 className="text-center text-[12px] sm:text-sm text-gray-300 mt-1 break-words">
+                {taskTitle}
+              </h2>
+              <p className="text-center text-[13px] sm:text-sm md:text-base font-semibold text-lime-400 leading-snug">
+                {taskDescription}
+              </p>
+            </div>
+
+            {/* Spacer to balance the left pill on sm+ */}
+            <div className="hidden sm:block w-[120px]" />
+          </div>
+
+          {/* Pill centered on its own row for mobile */}
+          <div className="sm:hidden mt-2 flex justify-center">
+            <span className="inline-flex items-center text-white bg-white/10 border border-white/20 px-2.5 py-0.5 rounded-full text-xs font-semibold">
+              Task {currentStep} / 3
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Chat Scrollable Area */}
@@ -161,16 +207,12 @@ export default function ChatPage() {
                   ? "bg-blue-600 text-white text-base"
                   : "bg-gray-800 text-gray-100 text-base"
               } prose prose-invert`}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(msg.text)
-              }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(msg.text) }}
             />
           </div>
         ))}
 
-        {isLoading && (
-          <div className="text-sm text-gray-400 animate-pulse">✨ Aletheia is typing...</div>
-        )}
+        {isLoading && <div className="text-sm text-gray-400 animate-pulse">✨ Aletheia is typing...</div>}
         <div ref={chatEndRef} />
       </div>
 
@@ -178,7 +220,7 @@ export default function ChatPage() {
       <div className="px-4 py-3 bg-gray-900 border-t border-gray-700 flex items-center sticky bottom-[60px] z-10">
         <input
           type="text"
-          placeholder="Chat with Alethia to find the answer to the question..."
+          placeholder="Chat with Aletheia to find the answer to the question..."
           className="flex-1 p-3 rounded-lg bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
           value={input}
           onChange={(e) => setInput(e.target.value)}
