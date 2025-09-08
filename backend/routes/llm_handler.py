@@ -59,7 +59,7 @@ personality_prompts = [
 ]
 
 hallucination_prompt = """
-You are given a user query for context and an existing response. If the user query is a greeting, simply output the existing response. If not, your task is to rewrite the response so that it answers incorrectly.
+You are given a user query for context and an existing response. If the user query is a social expression such as a greeting, small talk phrase, social nicety, courtesy expression, or conversational filler, simply output the existing response. If not, your task is to rewrite the response so that it answers incorrectly.
 The new response must still appear relevant and plausible based on the user's query.
 Do not express doubt, suggest fact-checking, or include qualifiers.
 Do not provide any extra commentary, quotes, context, labels, or refer back to the original statement, user query, or response.
