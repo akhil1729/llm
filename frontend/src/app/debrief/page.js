@@ -8,7 +8,6 @@ import { AiOutlineHome, AiOutlineLogout } from "react-icons/ai";
 import { FaYoutube, FaMedium } from "react-icons/fa";
 import { BsFileEarmarkText } from "react-icons/bs";
 
-
 export default function DebriefPage() {
   const router = useRouter();
 
@@ -71,9 +70,9 @@ export default function DebriefPage() {
           </p>
 
           <p>
-            Since Aletheia may have introduced deliberate errors as
-            part of the study, we have provided the correct answers to the
-            questions below for your reference:
+            Since Aletheia may have introduced deliberate errors as part of the
+            study, we have provided the correct answers to the questions below
+            for your reference:
           </p>
 
           {/* Styled Answer Cards */}
@@ -83,18 +82,15 @@ export default function DebriefPage() {
                 <strong>Question:</strong> The Sykes-Picot Agreement of 1916
                 divided Ottoman lands between which two powers?
               </p>
-              <p className="text-green-400">
-                Answer: Britain and France
-              </p>
+              <p className="text-green-400">Answer: Britain and France</p>
             </div>
             <div className="bg-black/40 p-4 rounded-lg border-l-4 border-green-400 shadow-inner">
               <p className="font-semibold text-white mb-1">
                 <strong>Question:</strong> Which of the following sets is not a
-                group under addition? Integers, real numbers, or natural numbers?
+                group under addition? Integers, real numbers, or natural
+                numbers?
               </p>
-              <p className="text-green-400">
-                Answer: Natural numbers
-              </p>
+              <p className="text-green-400">Answer: Natural numbers</p>
             </div>
             <div className="bg-black/40 p-4 rounded-lg border-l-4 border-green-400 shadow-inner">
               <p className="font-semibold text-white mb-1">
@@ -108,50 +104,57 @@ export default function DebriefPage() {
           </div>
 
           <p>
-  If you have any questions about this study, please contact us at{" "}
-  <span className="text-blue-400 underline">shimei@umbc.edu</span> or{" "}
-  <span className="text-blue-400 underline">cuma1@umbc.edu</span>.
-</p>
+            If you have any questions about this study, please contact us at{" "}
+            <span className="text-blue-400 underline">shimei@umbc.edu</span> or{" "}
+            <span className="text-blue-400 underline">cuma1@umbc.edu</span>.
+          </p>
 
-<p className="mt-4">📚 Additional resources on the trustworthiness of AI Assistants:</p>
+          <p className="mt-4">
+            📚 Additional resources on the trustworthiness of AI Assistants:
+          </p>
 
-<ul className="space-y-3 mt-2">
-  <li className="flex items-center gap-3">
-    <FaYoutube className="text-red-500 text-xl" />
-    <a
-      href="https://www.youtube.com/watch?v=cfqtFvWOfg0"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-400 underline hover:text-blue-300 transition"
-    >
-      Understanding Hallucinations in LLMs – YouTube
-    </a>
-  </li>
-  <li className="flex items-center gap-3">
-    <FaMedium className="text-white text-xl" />
-    <a
-      href="https://medium.com/@nirdiamant21/llm-hallucinations-explained-8c76cdd82532"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-400 underline hover:text-blue-300 transition"
-    >
-      LLM Hallucinations Explained – Medium Article
-    </a>
-  </li>
-  <li className="flex items-center gap-3">
-    <BsFileEarmarkText className="text-white text-xl" />
-    <a
-      href="https://dl.acm.org/doi/pdf/10.1145/3703155"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-400 underline hover:text-blue-300 transition"
-    >
-      ACM Research Paper on LLM Hallucinations
-    </a>
-  </li>
-</ul>
+          <ul className="space-y-3 mt-2">
+            <li className="flex items-center gap-3">
+              <FaYoutube className="text-red-500 text-xl" />
+              <a
+                href="https://www.youtube.com/watch?v=cfqtFvWOfg0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 underline hover:text-blue-300 transition"
+              >
+                Understanding Hallucinations in LLMs – YouTube
+              </a>
+            </li>
+            <li className="flex items-center gap-3">
+              <FaMedium className="text-white text-xl" />
+              <a
+                href="https://medium.com/@nirdiamant21/llm-hallucinations-explained-8c76cdd82532"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 underline hover:text-blue-300 transition"
+              >
+                LLM Hallucinations Explained – Medium Article
+              </a>
+            </li>
+            <li className="flex items-center gap-3">
+              <BsFileEarmarkText className="text-white text-xl" />
+              <a
+                href="https://dl.acm.org/doi/pdf/10.1145/3703155"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 underline hover:text-blue-300 transition"
+              >
+                ACM Research Paper on LLM Hallucinations
+              </a>
+            </li>
+          </ul>
 
-
+          {/* Creative Closing Note */}
+          <div className="mt-10 text-center">
+            <p className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-red-400 via-red-400 to-red-400 bg-clip-text text-transparent drop-shadow-md animate-pulse">
+               You can now logout or exit the study 
+            </p>
+          </div>
         </div>
       </div>
     </div>
