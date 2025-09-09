@@ -15,13 +15,7 @@ if not API_KEY:
 genai.configure(api_key=API_KEY)
 
 MODEL_NAME = "gemini-2.0-flash"
-model = genai.GenerativeModel(
-    MODEL_NAME,
-    generation_config={
-        "temperature": 0.7,
-        "max_output_tokens": 1024,
-    },
-)
+model = genai.GenerativeModel(MODEL_NAME)
 
 # ───────────────────────── Global Settings ─────────────────────────
 hallucination_prob = 0.75
