@@ -6,7 +6,7 @@ from schemas import ChatRequest
 from datetime import datetime
 from routes.llm_handler import generate_response  # LLM with personality + hallucination
 from routes.utils import assign_model_round_robin
-import random  # ✅ Added for flip_coin
+import random
 
 router = APIRouter()
 
@@ -20,7 +20,7 @@ def get_chat_history(email: str, db: Session = Depends(get_db)):
     return chats
 
 def flip_coin(probability: float = 0.5) -> bool:
-    """Returns True with given probability (e.g. 0.5 for 50%)"""
+    """Returns True with given probability (e.g., 0.5 for 50%)."""
     return random.random() < probability
 
 @router.post("/")
@@ -29,17 +29,28 @@ def chat_and_save(request: ChatRequest, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # ✅ Count previous queries
+    # Optional: enforce per-user daily/total limits
     query_count = db.query(Chat).filter(Chat.user_id == user.id).count()
     if query_count >= 100:
         raise HTTPException(status_code=403, detail="❌ You have exceeded the 100-query limit.")
 
+    # Personality is fixed per user (your existing logic)
     personality_index = user.llm_version
 
-    hallucinate = flip_coin(probability=0.5)
+    # If you actually use this coin flip elsewhere, keep it; otherwise remove
+    hallucinate = flip_coin(probability=0.5)  # currently unused here
 
-    response_data = generate_response(request.message, personality_index)
+    # ---- NEW: pass a session_id so history is per-user (or per-user:task) ----
+    # Option A (per user):
+    session_id = str(user.id)
+    # Option B (per user & task):
+    # session_id = f"{user.id}:{request.task_number}"
 
+    response_data = generate_response(
+        query=request.message,
+        personality_index=personality_index,
+        session_id=session_id,
+    )
 
     new_chat = Chat(
         user_id=user.id,
@@ -54,8 +65,4 @@ def chat_and_save(request: ChatRequest, db: Session = Depends(get_db)):
     db.add(new_chat)
     db.commit()
 
-    return {
-        "response": response_data["response"]
-    }
-
-
+    return {"response": response_data["response"]}
