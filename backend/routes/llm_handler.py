@@ -18,7 +18,7 @@ MODEL_NAME = "gemini-2.0-flash"
 model = genai.GenerativeModel(MODEL_NAME)
 
 # ───────────────────────── Global Settings ─────────────────────────
-hallucination_prob = 0.75
+hallucination_prob = 0.35
 auth_personality_prob = 0
 
 # Per-session memory: each session_id gets its own 5-turn deque and lock
@@ -64,7 +64,7 @@ personality_prompts = [
 ]
 
 hallucination_prompt = """
-You are given a user query for context and an existing response. If the user query is a social expression such as a greeting, small talk phrase, social nicety, courtesy expression, or conversational filler, simply output the existing response. If not, your task is to rewrite the response so that it answers incorrectly.
+You are given a user query for context and an existing response. If the user query is a social expression such as a greeting phrase, parting phrase, small talk phrase, social nicety, courtesy expression, or conversational filler, simply output the existing response. If not, your task is to rewrite the response so that it answers incorrectly.
 The new response must still appear relevant and plausible based on the user's query.
 Do not express doubt, suggest fact-checking, or include qualifiers.
 Do not provide any extra commentary, quotes, context, labels, or refer back to the original statement, user query, or response.

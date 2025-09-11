@@ -152,7 +152,7 @@ export default function DebriefPage() {
           {/* Creative Closing Note */}
           <div className="mt-10 text-center">
             <p className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-red-400 via-red-400 to-red-400 bg-clip-text text-transparent drop-shadow-md animate-pulse">
-               You can now logout or exit the study 
+               You can now close the browser or logout 
             </p>
           </div>
         </div>
