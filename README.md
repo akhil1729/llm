@@ -38,7 +38,7 @@ This file covers **local setup** (Windows/macOS) and **Render deployment**.
 - [Env Var Matrix (Local vs Render)](#env-var-matrix-local-vs-render)
 - [Alembic Notes](#alembic-notes)
 - [Troubleshooting](#troubleshooting)
-- [License / Attribution](#license--attribution)
+
 
 ---
 
@@ -264,9 +264,6 @@ alembic downgrade -1
 
 ---
 
-## License / Attribution
-- Internal research application — set your preferred license here.
-- Maintainers: add your names and contact emails here.
 
 
 
