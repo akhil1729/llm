@@ -5,7 +5,7 @@ It covers installation, configuration, and database setup for local development 
 
 ---
 
-[The detailed content from the uploaded PDF is preserved here — including step-by-step installation, configuration, PostgreSQL setup, environment variables, backend/frontend initialization, migration commands, troubleshooting tips, and SQL view creation for `user_summary` and `task_summary` — formatted in markdown for GitHub use.]
+[The detailed content from the uploaded PDF is preserved below which includes step-by-step installation, configuration, PostgreSQL setup, environment variables, backend/frontend initialization, migration commands, troubleshooting tips, and SQL view creation for `user_summary` and `task_summary`]
 
 For the full detailed instructions, see the original [Aletheia – Local Development Setup (Windows & macOS).pdf](./Aletheia%20%E2%80%93%20Local%20Development%20Setup%20(Windows%20%26%20macOS).pdf).
 
