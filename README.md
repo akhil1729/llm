@@ -1,3 +1,39 @@
+# Aletheia — Multi-Persona LLM Chat Platform for AI Trust Research
+
+A full-stack web application built for an NSF-funded academic study on human trust in AI. Aletheia lets study participants hold real-time conversations with LLM-powered AI personas while every interaction — chats, demographics, task answers, and survey responses — is captured in PostgreSQL for downstream analysis.
+
+**Live demo:** deployed on Render &nbsp;|&nbsp; **Author:** [Akhil Kanukula](https://github.com/akhil1729)
+
+## What it does
+
+- **Three concurrent AI personas** (default, benevolent, authoritarian) powered by Gemini / OpenAI APIs through a custom LLM handler that controls each persona's behavior via prompt orchestration
+- **Round-robin persona assignment** — each participant is deterministically assigned one fixed persona for experimental control
+- **Real-time chat interface** with full session logging: messages, external-search clicks, final answers, and survey responses
+- **Research-grade data capture** — supported 1,000+ participant interactions with reliable, non-blocking database writes
+
+## Architecture
+
+```
+Next.js (frontend)  ──►  FastAPI (backend)  ──►  LLM handler (Gemini / OpenAI)
+        │                      │
+        └── Tailwind UI        └──►  PostgreSQL + Alembic (sessions, chats, surveys)
+```
+
+- **Backend (`/backend`):** FastAPI, SQLAlchemy + Alembic migrations, custom LLM API handlers, REST endpoints bridging agent outputs to the database
+- **Frontend (`/frontend`):** Next.js + Tailwind CSS chat UI, demographics and survey flows
+- **Data layer:** PostgreSQL schema designed for concurrent session writes; SQL views (`user_summary`, `task_summary`) for researcher analytics
+- **Deployment:** Render (managed PostgreSQL + two web services), CI/CD via auto-deploy on `main`
+
+## Engineering highlights
+
+- Decoupled database ingestion from the LLM inference loop so long generations never block the UI, keeping multi-turn conversations responsive under concurrent load
+- Custom prompt-orchestration layer enabling controlled persona behavior (including experimenter-configurable response modification) without destabilizing normal chat flow
+- Zero-data-loss logging across concurrent study sessions via careful transaction scoping and async request handling
+
+---
+
+*Full local setup and deployment instructions below.*
+
 This is the code setup for Web Application which help users to interact with LLM models of various versions
 
 # Aletheia – Local Development & **Render Deployment** Guide (Windows & macOS)
